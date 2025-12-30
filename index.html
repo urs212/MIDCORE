@@ -155,7 +155,7 @@
         <button id="confirmBtn" disabled onclick="copyAddress()">확인</button>
 
         <div id="address" class="server-address hidden">
-            mc.guamserver.ggm.kr
+            midcore.64bit.kr
         </div>
     </div>
 </div>
@@ -176,7 +176,7 @@
         confirmBtn.disabled = !agree.checked;
     }
     function copyAddress() {
-        navigator.clipboard.writeText("mc.guamserver.ggm.kr").then(() => {
+        navigator.clipboard.writeText("midcore.64bit.kr").then(() => {
             alert("서버 주소가 클립보드에 복사되었습니다.");
             address.classList.remove("hidden");
         });
@@ -185,3 +185,4 @@
 
 </body>
 </html>
+
