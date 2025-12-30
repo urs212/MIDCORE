@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>마인크래프트 서버 안내</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Pretendard", Arial, sans-serif;
+            background: #f5f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #222;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+        .hidden { display: none; }
+
+        .notice {
+            background: #f1f5ff;
+            border-left: 4px solid #2563eb;
+            padding: 12px;
+            margin: 14px 0;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fff1f1;
+            border-left: 4px solid #dc2626;
+            padding: 12px;
+            margin: 14px 0;
+            font-size: 14px;
+        }
+        .rule {
+            background: #f9fafb;
+            border-left: 4px solid #111827;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+        .checkbox-area {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+            font-size: 13px;
+        }
+        .checkbox-area input {
+            width: auto;
+            margin-right: 8px;
+        }
+        .server-address {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 학년 선택 -->
+    <div id="ageScreen">
+        <h1>서버 이용 대상 확인</h1>
+        <p>본 서버는 <b>초등학생 ~ 중학교 3학년</b>까지 이용 가능합니다.</p>
+
+        <select id="grade">
+            <option value="">학년 선택</option>
+            <option value="elementary">초등학생</option>
+            <option value="1">중학교 1학년</option>
+            <option value="2">중학교 2학년</option>
+            <option value="3">중학교 3학년</option>
+            <option value="other">그 외</option>
+        </select>
+
+        <button onclick="checkGrade()">다음</button>
+    </div>
+
+    <!-- 서버 안내 -->
+    <div id="infoScreen" class="hidden">
+        <h1>마인크래프트 서버 안내</h1>
+
+        <div class="notice">
+            <b>서버 버전</b><br>
+            Minecraft Java Edition 1.21.10
+        </div>
+
+        <p>
+            지구 맵 기반 <b>국가 전쟁 서버</b>입니다.<br>
+            코어(Core)를 파괴해 국가를 점령하며,<br>
+            전쟁은 <b>유럽 대륙</b>에서 진행됩니다.
+        </p>
+
+        <div class="warning">
+            <b>핵 / 치트 금지</b><br>
+            안티치트 시스템이 상시 운영됩니다.<br>
+            적발 시 <b>경고 없이 즉시 제재 또는 영구 밴</b>.
+        </div>
+
+        <div class="rule">
+            <b>🚫 테러 금지</b><br>
+            무차별 파괴, 반복 공격, 서버 운영 방해 행위는<br>
+            테러로 간주되며 <b>즉시 제재</b>됩니다.
+        </div>
+
+        <div class="rule">
+            <b>🚫 동맹 금지 (즉시 밴)</b><br>
+            국가 간 동맹, 담합, 불가침 조약은 전면 금지됩니다.<br>
+            디스코드 등 외부 메신저 협의도 포함되며,<br>
+            <b>동맹이 확인되는 즉시 경고 없이 영구 밴</b>됩니다.
+        </div>
+
+        <div class="checkbox-area">
+            <input type="checkbox" id="agree" onchange="toggleConfirm()">
+            <label for="agree">모든 내용을 다 읽었습니까?</label>
+        </div>
+
+        <button id="confirmBtn" disabled onclick="copyAddress()">확인</button>
+
+        <div id="address" class="server-address hidden">
+            mc.guamserver.ggm.kr
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkGrade() {
+        const g = document.getElementById("grade").value;
+        if (g === "elementary" || g === "1" || g === "2" || g === "3") {
+            ageScreen.classList.add("hidden");
+            infoScreen.classList.remove("hidden");
+        } else if (g === "other") {
+            alert("초등학생 ~ 중학교 3학년까지만 이용 가능합니다.");
+        } else {
+            alert("학년을 선택해주세요.");
+        }
+    }
+    function toggleConfirm() {
+        confirmBtn.disabled = !agree.checked;
+    }
+    function copyAddress() {
+        navigator.clipboard.writeText("mc.guamserver.ggm.kr").then(() => {
+            alert("서버 주소가 클립보드에 복사되었습니다.");
+            address.classList.remove("hidden");
+        });
+    }
+</script>
+
+</body>
+</html>
