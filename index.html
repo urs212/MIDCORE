@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MidCore Server | web.midcore.shop</title>
+    <title>MidCore Server | 유럽 국가전쟁</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg-color: #0a0a0c; --card-bg: #161618; --accent-color: #00a8ff; --text-main: #ffffff; --text-sub: #a0a0a2; --border-color: #2a2a2c; }
+        :root { --bg-color: #0a0a0c; --card-bg: #161618; --accent-color: #00a8ff; --text-main: #ffffff; --text-sub: #a0a0a2; --border-color: #2a2a2c; --warning-color: #ff4757; }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: "Pretendard", sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        
-        /* 네비게이션 */
+
+        /* 로딩 오버레이 */
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 12, 0.98); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #333; border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         nav { width: 100%; max-width: 1100px; padding: 25px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
-        .login-btn { background: #5865F2; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .login-btn:hover { background: #4752c4; }
-
-        /* 헤더 */
-        header { padding: 80px 20px; text-align: center; }
-        header h1 { font-size: 4.5rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #fff, #00a8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
+        .login-btn { background: #5865F2; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         
-        /* 레이아웃 */
+        header { padding: 60px 20px; text-align: center; }
+        header h1 { font-size: 4rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #fff, #ff4757); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
+        header p { color: var(--text-sub); margin-top: 10px; font-size: 1.1rem; }
+
         .content { width: 100%; max-width: 1100px; padding: 20px; box-sizing: border-box; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 30px; margin-bottom: 30px; }
-        .section-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        .rule-card { border-left: 4px solid var(--warning-color); }
+        .rule-item { margin-bottom: 15px; }
+        .rule-item b { color: var(--warning-color); }
 
-        /* 서버 설명 스타일 */
-        .server-intro { line-height: 1.8; color: var(--text-sub); }
-        .feature-tag { display: inline-block; background: rgba(0, 168, 255, 0.1); color: var(--accent-color); padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; margin-right: 8px; font-weight: 600; }
+        .download-box { background: rgba(0, 168, 255, 0.1); border: 1px solid var(--accent-color); border-radius: 12px; padding: 20px; text-align: center; }
+        .download-btn { display: inline-block; background: var(--accent-color); color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 800; margin-top: 10px; }
 
-        /* 랭킹 스타일 */
-        .rank-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #222; }
-        .rank-item:last-child { border: none; }
-        .rank-name { font-weight: 600; }
+        .rank-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #222; }
         .rank-value { color: #ffd700; font-weight: 700; }
 
         @media (max-width: 900px) { .content { grid-template-columns: 1fr; } }
@@ -39,96 +41,124 @@
 </head>
 <body>
 
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loading-text" style="margin-top: 20px; font-weight: 600;"></p>
+    </div>
+
     <nav>
-        <div style="font-weight: 900; font-size: 1.6rem; letter-spacing: -1px;">MIDCORE</div>
+        <div style="font-weight: 900; font-size: 1.6rem; color: #ff4757;">MIDCORE</div>
         <div id="user-area">
-            <button class="login-btn" onclick="location.href='https://discord.com/api/oauth2/authorize?client_id=1460982956842680523&redirect_uri=https%3A%2F%2Fweb.midcore.shop%2F&response_type=token&scope=identify'"><i class="fab fa-discord"></i> 로그인</button>
+            <button class="login-btn" onclick="handleLogin()"><i class="fab fa-discord"></i> 로그인</button>
         </div>
     </nav>
 
     <header>
-        <h1>MIDCORE SHOP</h1>
-        <p style="color: var(--text-sub); font-size: 1.2rem;">마인크래프트 1.21.4 최고의 경제 서버</p>
+        <h1>MIDCORE WAR</h1>
+        <p>지구 맵 기반 유럽 대륙 국가 전쟁 서버</p>
     </header>
 
     <div class="content">
         <div>
-            <div class="section-title"><i class="fas fa-info-circle" style="color: var(--accent-color);"></i> 서버 설명</div>
+            <div class="section-title"><i class="fas fa-map-marked-alt"></i> 서버 개요</div>
             <div class="card">
-                <div class="server-intro">
-                    <p><span class="feature-tag">버전 1.21.4</span> <span class="feature-tag">24시간 가동</span> <span class="feature-tag">경제 서버</span></p>
-                    미드코어(MidCore) 서버는 최신 버전인 1.21.4를 지향하며, 플레이어 간의 자유로운 거래와 탄탄한 경제 시스템을 자랑합니다. 
-                    안정적인 서버 환경에서 당신만의 제국을 건설해 보세요.
+                <p style="line-height: 1.8;">
+                    미드코어(MidCore)는 <b>지구 맵</b>을 기반으로 펼쳐지는 대규모 유럽 국가 전쟁 서버입니다. <br>
+                    단순한 생존을 넘어, <b>유럽 대륙</b>에서 국가를 세우고 상대의 <b>코어(Core)</b>를 파괴하여 영토를 점령하세요. <br><br>
+                    <small style="color: var(--text-sub);">* 본 서버는 유저 후원금과 웹사이트 광고비로 운영됩니다.</small>
+                </p>
+            </div>
+
+            <div class="section-title"><i class="fas fa-download"></i> 리소스팩 필수 설치</div>
+            <div class="card">
+                <div class="download-box">
+                    <p style="margin-bottom: 10px;">코어 시스템 사용을 위해 <b>전용 리소스팩</b>이 반드시 필요합니다.</p>
+                    <a href="https://rule.midcore.64bit.kr" target="_blank" class="download-btn">리소스팩 다운로드 (PC 전용)</a>
+                    <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 15px;">※ 반드시 컴퓨터에서 접속하여 다운로드해 주세요.</p>
                 </div>
             </div>
 
-            <div class="section-title"><i class="fas fa-bullhorn" style="color: #ff4757;"></i> 서버 공지</div>
-            <div class="card" id="notice-content">불러오는 중...</div>
-
-            <div class="section-title"><i class="fas fa-scroll"></i> 패치노트</div>
-            <div class="card" id="patch-content" style="white-space: pre-wrap;">불러오는 중...</div>
+            <div class="section-title"><i class="fas fa-exclamation-triangle" style="color: var(--warning-color);"></i> 서버 이용 규칙 (필독)</div>
+            <div class="card rule-card">
+                <div class="rule-item">
+                    <b>🚫 핵 / 치트 절대 금지</b>
+                    <p style="font-size: 0.9rem; color: var(--text-sub);">안티치트 시스템이 상시 운영됩니다. 적발 시 <b>경고 없이 즉시 영구 밴</b> 처리됩니다.</p>
+                </div>
+                <div class="rule-item">
+                    <b>🚫 테러 금지</b>
+                    <p style="font-size: 0.9rem; color: var(--text-sub);">무차별 파괴, 반복 공격, 서버 운영 방해 행위는 즉시 제재 대상입니다.</p>
+                </div>
+                <div class="rule-item" style="margin-bottom: 0;">
+                    <b>🚫 동맹 금지 (중요)</b>
+                    <p style="font-size: 0.9rem; color: var(--text-sub);">국가 간 동맹, 담합, 불가침 조약은 <b>전면 금지</b>되어 있습니다. 확인 즉시 <b>경고 없이 영구 밴</b>됩니다.</p>
+                </div>
+            </div>
         </div>
 
         <div>
             <div class="section-title"><i class="fas fa-crown" style="color: #ffd700;"></i> 후원 랭킹</div>
-            <div class="card" id="rank-content">랭킹 데이터를 불러오는 중...</div>
+            <div class="card" id="rank-content">로딩 중...</div>
+
+            <div class="section-title"><i class="fas fa-bullhorn"></i> 공지사항</div>
+            <div class="card" id="notice-content" style="font-size: 0.9rem;">로딩 중...</div>
+
+            <div class="section-title"><i class="fas fa-history"></i> 최근 패치</div>
+            <div class="card" id="patch-content" style="font-size: 0.85rem; color: var(--text-sub); white-space: pre-wrap;">로딩 중...</div>
         </div>
     </div>
 
     <script>
-        // JSON 데이터 불러오기 함수
-        async function loadJSON(url) {
+        const CLIENT_ID = "1460982956842680523";
+        const REDIRECT_URI = "https://web.midcore.shop/";
+
+        function showLoading(text) {
+            const overlay = document.getElementById('loading-overlay');
+            document.getElementById('loading-text').innerText = text;
+            overlay.style.display = 'flex';
+        }
+
+        function handleLogin() {
+            showLoading("디스코드 연결 중...");
+            location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+        }
+
+        async function loadData() {
             try {
-                const response = await fetch(url);
-                return await response.json();
-            } catch (e) {
-                return { content: "데이터를 불러올 수 없습니다." };
-            }
+                const [patch, notice, rank] = await Promise.all([
+                    fetch('patch.json').then(r => r.json()),
+                    fetch('notice.json').then(r => r.json()),
+                    fetch('rank.json').then(r => r.json())
+                ]);
+                document.getElementById('patch-content').innerText = patch.content;
+                document.getElementById('notice-content').innerText = notice.content;
+                document.getElementById('rank-content').innerHTML = rank.map((u, i) => `
+                    <div class="rank-item">
+                        <span><b style="color:var(--accent-color)">${i+1}</b> ${u.name}</span>
+                        <span class="rank-value">${u.value} ₩</span>
+                    </div>`).join('') || "데이터 없음";
+            } catch (e) { console.error("데이터 로드 실패"); }
         }
 
-        async function init() {
-            // 패치노트 로드
-            const patchData = await loadJSON('patch.json');
-            document.getElementById('patch-content').innerText = patchData.content;
-
-            // 공지사항 로드
-            const noticeData = await loadJSON('notice.json');
-            document.getElementById('notice-content').innerText = noticeData.content;
-
-            // 랭킹 로드
-            const rankData = await loadJSON('rank.json');
-            const rankHtml = rankData.map((user, i) => `
-                <div class="rank-item">
-                    <span><b style="color:var(--accent-color); margin-right:10px;">${i+1}</b> ${user.name}</span>
-                    <span class="rank-value">${user.value} ₩</span>
-                </div>
-            `).join('');
-            document.getElementById('rank-content').innerHTML = rankHtml || "데이터가 없습니다.";
-
-            // 로그인 체크
-            checkLogin();
-        }
-
-        function checkLogin() {
+        window.onload = () => {
+            loadData();
             const fragment = new URLSearchParams(window.location.hash.slice(1));
             const token = fragment.get('access_token');
             if (token) {
+                showLoading("인증 확인 중...");
                 fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
                 .then(res => res.json())
                 .then(user => {
                     document.getElementById('user-area').innerHTML = `
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="35" style="border-radius:50%">
+                            <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="32" style="border-radius:50%">
                             <b>${user.username}</b>
-                            <button class="login-btn" style="background:#333; font-size:0.8rem;" onclick="location.href='/'">로그아웃</button>
-                        </div>
-                    `;
+                            <button class="login-btn" style="background:#333; font-size:0.75rem;" onclick="location.href='/'">로그아웃</button>
+                        </div>`;
+                    document.getElementById('loading-overlay').style.display = 'none';
                     window.history.replaceState({}, document.title, "/");
                 });
             }
-        }
-
-        init();
+        };
     </script>
 </body>
 </html>
