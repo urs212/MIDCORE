@@ -1,218 +1,171 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Midcore 서버 안내</title>
-<style>
-body {
-    margin: 0;
-    font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif;
-    background: #f5f6fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-.container {
-    background: #ffffff;
-    width: 100%;
-    max-width: 420px;
-    padding: 24px;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-h1 {
-    text-align: center;
-    margin-bottom: 16px;
-}
-.notice, .warning, .rule {
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    font-size: 14px;
-}
-.notice { background: #eef2ff; }
-.warning { background: #ffecec; }
-.rule { background: #fff6e5; }
-.checkbox-area {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-}
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 16px;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    cursor: pointer;
-}
-button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-#confirmBtn { background: #4f6cff; color: #fff; }
-#downloadBtn { background: #1abc9c; color: #fff; }
-.link {
-    text-align: center;
-    color: #4f6cff;
-    margin-top: 10px;
-    cursor: pointer;
-    font-size: 13px;
-}
-.hidden { display: none; }
-select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 12px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MidCore Server | 공식 홈페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0a0a0c;
+            --card-bg: #161618;
+            --accent-color: #00a8ff;
+            --text-main: #ffffff;
+            --text-sub: #a0a0a2;
+            --border-color: #2a2a2c;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: "Pretendard", sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        nav {
+            width: 100%;
+            max-width: 1000px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .user-area { display: flex; align-items: center; gap: 10px; }
+        .login-btn {
+            border: none; padding: 10px 16px; border-radius: 8px;
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s; text-decoration: none;
+        }
+        .discord-btn { background: #5865F2; color: #fff; }
+        .logout-btn { background: #ff4757; color: #fff; padding: 6px 12px; font-size: 0.85rem; border-radius: 5px; }
+
+        header { width: 100%; max-width: 800px; padding: 80px 20px; text-align: center; }
+        header h1 {
+            font-size: 4.5rem; font-weight: 900; margin: 0;
+            background: linear-gradient(to right, #ffffff, #00a8ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .address-box {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            padding: 18px 35px; border-radius: 50px; cursor: pointer;
+            margin-top: 35px; display: inline-flex; align-items: center; gap: 15px;
+            transition: 0.3s;
+        }
+        .address-box:hover { border-color: var(--accent-color); transform: translateY(-3px); }
+        .address-box code { font-size: 1.3rem; color: var(--accent-color); font-weight: 700; }
+
+        .content { width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; }
+        .section-title { font-size: 1.6rem; font-weight: 700; margin: 50px 0 25px 0; display: flex; align-items: center; gap: 12px; }
+        
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; margin-bottom: 25px; }
+        .patch-item { border-bottom: 1px solid var(--border-color); padding: 15px 0; }
+        .patch-item:last-child { border: none; }
+        .patch-date { color: var(--accent-color); font-weight: 700; font-size: 0.9rem; }
+
+        footer { margin: 100px 0 60px 0; color: var(--text-sub); font-size: 0.9rem; opacity: 0.6; }
+    </style>
 </head>
 <body>
-<div class="container">
 
-<!-- 나이 선택 화면 -->
-<div id="ageScreen">
-    <h1>이용자 학년 선택</h1>
-    <select id="gradeSelect">
-        <option value="">선택하세요</option>
-        <option>초등 1</option>
-        <option>초등 2</option>
-        <option>초등 3</option>
-        <option>초등 4</option>
-        <option>초등 5</option>
-        <option>초등 6</option>
-        <option>중등 1</option>
-        <option>중등 2</option>
-        <option>중등 3</option>
-    </select>
-    <button onclick="goInfo()">다음</button>
-</div>
+    <nav>
+        <div style="font-weight: 900; font-size: 1.4rem; letter-spacing: -1px;">MIDCORE</div>
+        <div class="user-area" id="user-area">
+            <button class="login-btn discord-btn" onclick="loginWithDiscord()">
+                <i class="fab fa-discord"></i> Discord 로그인
+            </button>
+        </div>
+    </nav>
 
-<!-- 안내 화면 -->
-<div id="infoScreen" class="hidden">
-    <h1>마인크래프트 서버 안내</h1>
+    <header>
+        <h1>MIDCORE</h1>
+        <p style="color: var(--text-sub); font-size: 1.1rem;">마인크래프트 1.21.4 최신 버전 지향 서버</p>
+        <div class="address-box" onclick="copyAddr()">
+            <i class="fa-solid fa-copy" style="color: var(--text-sub);"></i>
+            <code id="server-addr">midcore.mcv.kr</code>
+        </div>
+    </header>
 
-    <div class="notice" id="serverStatus">서버 상태 확인 중...</div>
+    <div class="content">
+        <div class="section-title"><i class="fa-solid fa-scroll"></i> 패치노트</div>
+        <div class="card">
+            <div class="patch-item">
+                <div class="patch-date">2026.01.14</div>
+                <div style="font-weight: 600; font-size: 1.1rem; margin-top: 5px;">홈페이지 시스템 및 로그인 모듈 최적화</div>
+                <p style="color:var(--text-sub); font-size:0.95rem; margin: 10px 0 0 0;">- 디스코드 OAuth2 연동 완료<br>- 1.21.4 버전 접속 주소 반영</p>
+            </div>
+        </div>
 
-    <div class="notice">
-        <b>서버 버전</b><br>
-        Minecraft Java Edition 1.21.10
+        <div class="section-title"><i class="fa-solid fa-gem"></i> 후원 등급</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="card">
+                <h3 style="color: var(--accent-color); margin-top: 0;">SKYPLUS</h3>
+                <p style="font-size:0.85rem; color:var(--text-sub);">분당 15원 수당 / 6시간 잠수 / 전용 칭호</p>
+                <div style="font-weight:800; font-size: 1.2rem;">20,000 KRW</div>
+            </div>
+            <div class="card">
+                <h3 style="color: var(--accent-color); margin-top: 0;">SKY</h3>
+                <p style="font-size:0.85rem; color:var(--text-sub);">분당 7원 수당 / 4시간 잠수 / 전용 칭호</p>
+                <div style="font-weight:800; font-size: 1.2rem;">10,000 KRW</div>
+            </div>
+        </div>
     </div>
 
-    <p style="font-size:14px; line-height:1.5">
-        지구 맵 기반 <b>국가 전쟁 서버</b>입니다.<br>
-        코어(Core)를 파괴하여 국가를 점령합니다.<br>
-        전쟁은 <b>유럽 대륙</b>에서 진행됩니다.
-    </p>
+    <footer>&copy; 2026 MidCore Server. All rights reserved.</footer>
 
-    <div class="warning">
-        <b>핵 / 치트 금지</b><br>
-        안티치트 시스템이 상시 운영됩니다.<br>
-        적발 시 <b>경고 없이 즉시 제재 또는 영구 밴</b>됩니다.
-    </div>
+    <script>
+        // 제공해주신 정보
+        const CLIENT_ID = "1460982956842680523";
+        // 현재 사이트 주소 (디스코드 개발자 포털의 Redirect URI와 100% 일치해야 함)
+        const REDIRECT_URI = window.location.origin + window.location.pathname;
 
-    <div class="rule">
-        <b>🚫 테러 금지</b><br>
-        무차별 파괴, 반복 공격, 서버 운영 방해 행위는<br>
-        즉시 제재 대상입니다.
-    </div>
+        function loginWithDiscord() {
+            // 연결 거부 문제를 해결하기 위해 절대 경로로 현재 창에서 직접 이동
+            const discordUrl = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify%20email`;
+            window.location.href = discordUrl;
+        }
 
-    <div class="rule">
-        <b>🚫 동맹 금지 (즉시 밴)</b><br>
-        국가 간 동맹, 담합, 불가침 조약 전면 금지<br>
-        <b>확인 즉시 경고 없이 영구 밴</b>
-    </div>
+        window.addEventListener('load', () => {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
 
-    <div class="checkbox-area">
-        <input type="checkbox" id="agree" onchange="toggleConfirm()">
-        <label for="agree">모든 내용을 다 읽었습니까?</label>
-    </div>
+            if (accessToken) {
+                // 토큰이 있는 경우 유저 정보 호출
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { authorization: `Bearer ${accessToken}` }
+                })
+                .then(res => res.json())
+                .then(user => {
+                    if (user.id) {
+                        document.getElementById('user-area').innerHTML = `
+                            <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="30" style="border-radius:50%; border: 1px solid var(--border-color);">
+                            <span style="font-weight: 600; font-size: 0.9rem;">${user.username}님</span>
+                            <button class="logout-btn" onclick="location.href=window.location.pathname">로그아웃</button>
+                        `;
+                    }
+                    // 주소창의 토큰 제거 (깔끔하게 유지)
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                })
+                .catch(err => {
+                    console.error("로그인 정보 불러오기 실패:", err);
+                });
+            }
+        });
 
-    <button id="confirmBtn" disabled onclick="showResource()">확인</button>
-</div>
-
-<!-- 리소스팩 화면 -->
-<div id="resourceScreen" class="hidden">
-    <h1>리소스팩 필요</h1>
-    <p style="font-size:14px; line-height:1.5">
-        이 서버에 입장하려면<br><b>전용 리소스팩</b>이 필요합니다.
-    </p>
-    <button id="downloadBtn" onclick="downloadPack()">리소스팩 다운로드</button>
-    <div class="link" onclick="alreadyInstalled()">이미 설치했습니다</div>
-</div>
-
-<!-- 주소 화면 -->
-<div id="addressScreen" class="hidden">
-    <h1>서버 주소</h1>
-    <div class="notice" id="serverAddress">mc.midcore.64bit.kr</div>
-    <button onclick="copyAddress()">주소 복사</button>
-</div>
-
-</div>
-
-<script>
-const SERVER_ADDRESS = "mc.midcore.64bit.kr";
-
-function goInfo() {
-    const grade = document.getElementById("gradeSelect").value;
-    if (!grade) {
-        alert("학년을 선택하세요");
-        return;
-    }
-    document.getElementById("ageScreen").classList.add("hidden");
-    document.getElementById("infoScreen").classList.remove("hidden");
-}
-
-function toggleConfirm() {
-    document.getElementById("confirmBtn").disabled = !document.getElementById("agree").checked;
-}
-
-function showResource() {
-    document.getElementById("infoScreen").classList.add("hidden");
-    document.getElementById("resourceScreen").classList.remove("hidden");
-}
-
-function alreadyInstalled() {
-    document.getElementById("resourceScreen").classList.add("hidden");
-    document.getElementById("addressScreen").classList.remove("hidden");
-}
-
-function downloadPack() {
-    const link = document.createElement("a");
-    link.href = "re.zip";
-    link.download = "re.zip";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    setTimeout(() => {
-        alreadyInstalled();
-    }, 1500);
-}
-
-function copyAddress() {
-    navigator.clipboard.writeText(SERVER_ADDRESS);
-    alert("서버 주소가 복사되었습니다");
-}
-
-// 서버 상태 자동 새로고침 (30초)
-async function checkServer() {
-    try {
-        const res = await fetch(`https://api.mcsrvstat.us/2/${SERVER_ADDRESS}`);
-        const data = await res.json();
-        document.getElementById("serverStatus").innerText = data.online ? "서버 🟢온라인" : "서버 🔴오프라인";
-    } catch {
-        document.getElementById("serverStatus").innerText = "상태 확인 실패";
-    }
-}
-checkServer();
-setInterval(checkServer, 30000);
-</script>
+        function copyAddr() {
+            const addr = document.getElementById('server-addr').innerText;
+            navigator.clipboard.writeText(addr).then(() => {
+                alert('서버 주소가 복사되었습니다!');
+            });
+        }
+    </script>
 </body>
 </html>
