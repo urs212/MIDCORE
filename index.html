@@ -28,7 +28,7 @@
         }
         .spinner { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        #loading-text { margin-top: 20px; font-weight: 600; letter-spacing: 1px; }
+        #loading-text { margin-top: 20px; font-weight: 600; }
 
         nav { width: 100%; max-width: 1000px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .user-area { display: flex; align-items: center; gap: 12px; }
@@ -39,12 +39,12 @@
         header { width: 100%; max-width: 800px; padding: 60px 20px; text-align: center; }
         header h1 { font-size: 4rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #fff, #00a8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .content { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+        .content { width: 100%; max-width: 1000px; padding: 20px; box-sizing: border-box; display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
         .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
 
         /* 랭킹 스타일 */
-        .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
+        .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; }
         .rank-item:last-child { border: none; }
         .rank-number { font-weight: 800; color: var(--accent-color); width: 30px; }
         .rank-name { flex-grow: 1; margin-left: 10px; }
@@ -52,8 +52,9 @@
 
         /* 관리자 편집 모드 */
         .admin-controls { display: none; flex-direction: column; gap: 10px; margin-top: 15px; }
-        textarea { width: 100%; background: #000; color: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; font-family: inherit; }
-        .save-btn { background: var(--admin-color); color: #fff; border: none; padding: 8px; border-radius: 5px; cursor: pointer; }
+        textarea { width: 100%; background: #000; color: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; font-family: inherit; font-size: 0.9rem; }
+        .save-btn { background: var(--admin-color); color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .edit-icon-btn { background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 0.9rem; }
 
         @media (max-width: 800px) { .content { grid-template-columns: 1fr; } }
     </style>
@@ -79,18 +80,18 @@
 
     <div class="content">
         <div>
-            <div class="section-title">📜 패치노트 <button id="edit-patch" style="display:none;" onclick="toggleEdit('patch')">편집</button></div>
+            <div class="section-title">📜 패치노트 <button class="edit-icon-btn admin-only" onclick="toggleEdit('patch')"><i class="fas fa-edit"></i></button></div>
             <div class="card">
-                <div id="patch-content" style="white-space: pre-wrap;">불러오는 중...</div>
+                <div id="patch-content" style="white-space: pre-wrap;">데이터를 불러오는 중...</div>
                 <div id="patch-admin" class="admin-controls">
-                    <textarea id="patch-input" rows="5"></textarea>
+                    <textarea id="patch-input" rows="6"></textarea>
                     <button class="save-btn" onclick="dbSave('patch')">업데이트 게시</button>
                 </div>
             </div>
 
-            <div class="section-title">📢 서버 공지 <button id="edit-notice" style="display:none;" onclick="toggleEdit('notice')">편집</button></div>
+            <div class="section-title">📢 서버 공지 <button class="edit-icon-btn admin-only" onclick="toggleEdit('notice')"><i class="fas fa-edit"></i></button></div>
             <div class="card" style="border-left: 4px solid var(--accent-color);">
-                <div id="notice-content" style="white-space: pre-wrap;">불러오는 중...</div>
+                <div id="notice-content" style="white-space: pre-wrap;">공지를 불러오는 중...</div>
                 <div id="notice-admin" class="admin-controls">
                     <textarea id="notice-input" rows="3"></textarea>
                     <button class="save-btn" onclick="dbSave('notice')">공지 등록</button>
@@ -99,12 +100,12 @@
         </div>
 
         <div>
-            <div class="section-title">🏆 후원 랭킹 <button id="edit-rank" style="display:none;" onclick="toggleEdit('rank')">편집</button></div>
+            <div class="section-title">🏆 후원 & 돈 랭킹 <button class="edit-icon-btn admin-only" onclick="toggleEdit('rank')"><i class="fas fa-edit"></i></button></div>
             <div class="card">
                 <div id="rank-content">데이터가 없습니다.</div>
                 <div id="rank-admin" class="admin-controls">
-                    <p style="font-size:0.8rem; color:var(--text-sub);">형식: 이름:금액 (한줄에 하나씩)</p>
-                    <textarea id="rank-input" rows="10"></textarea>
+                    <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:5px;">형식: 닉네임:금액 (엔터로 구분)</p>
+                    <textarea id="rank-input" rows="12"></textarea>
                     <button class="save-btn" onclick="dbSave('rank')">랭킹 갱신</button>
                 </div>
             </div>
@@ -115,44 +116,56 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+        // 사용자님이 제공해주신 설정값
         const firebaseConfig = {
-            apiKey: "본인의_API_KEY",
-            databaseURL: "본인의_DB_URL",
-            projectId: "본인의_ID",
-            appId: "본인의_APP_ID"
+            apiKey: "AIzaSyAe5EE6gviXAM3ppwgr9wAxxauvSdxk38A",
+            authDomain: "webmidcore.firebaseapp.com",
+            databaseURL: "https://webmidcore-default-rtdb.firebaseio.com", // 프로젝트 ID 기반 자동생성 주소
+            projectId: "webmidcore",
+            storageBucket: "webmidcore.firebasestorage.app",
+            messagingSenderId: "704062736082",
+            appId: "1:704062736082:web:838c4d14ea74b054db4f0b"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // 실시간 데이터 불러오기
-        const dbPaths = ['patch', 'notice', 'rank'];
-        dbPaths.forEach(path => {
+        // 실시간 데이터 동기화
+        const paths = ['patch', 'notice', 'rank'];
+        paths.forEach(path => {
             onValue(ref(db, 'midcore/' + path), (snapshot) => {
-                const data = snapshot.val() || "내용이 없습니다.";
+                const data = snapshot.val() || "내용이 비어있습니다.";
                 if(path === 'rank') renderRank(data);
                 else document.getElementById(path + '-content').innerText = data;
             });
         });
 
+        // 랭킹 그리기 함수
         function renderRank(data) {
             const container = document.getElementById('rank-content');
-            if(data === "내용이 없습니다.") { container.innerHTML = data; return; }
-            const lines = data.split('\n');
+            if(data === "내용이 비어있습니다.") { container.innerHTML = data; return; }
+            const lines = data.split('\n').filter(l => l.includes(':'));
             let html = '';
             lines.forEach((line, i) => {
                 const [name, val] = line.split(':');
-                if(name && val) html += `<div class="rank-item"><span class="rank-number">${i+1}</span><span class="rank-name">${name}</span><span class="rank-value">${val}</span></div>`;
+                html += `<div class="rank-item">
+                            <span class="rank-number">${i+1}</span>
+                            <span class="rank-name">${name.trim()}</span>
+                            <span class="rank-value">${val.trim()}</span>
+                         </div>`;
             });
-            container.innerHTML = html || "형식이 올바르지 않습니다.";
+            container.innerHTML = html || "데이터 형식이 잘못되었습니다. (예: 닉네임:10,000)";
         }
 
-        window.dbSave = (path) => {
-            const val = document.getElementById(path + '-input').value;
-            set(ref(db, 'midcore/' + path), val).then(() => {
-                alert('DB 업데이트 완료!');
-                toggleEdit(path);
-            });
+        // 전역 저장 함수
+        window.dbSave = (type) => {
+            const val = document.getElementById(type + '-input').value;
+            set(ref(db, 'midcore/' + type), val)
+                .then(() => {
+                    alert('성공적으로 저장되었습니다.');
+                    toggleEdit(type);
+                })
+                .catch(e => alert('권한이 없거나 오류가 발생했습니다.'));
         };
     </script>
 
@@ -167,17 +180,17 @@
         }
 
         function startLogin() {
-            showLoading("디스코드 연결 중...");
+            showLoading("디스코드 보안 연결 중...");
             setTimeout(() => {
                 location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-            }, 800);
+            }, 600);
         }
 
         function startLogout() {
-            showLoading("로그아웃 중...");
+            showLoading("로그아웃 중입니다...");
             setTimeout(() => {
                 location.href = window.location.pathname;
-            }, 1000);
+            }, 800);
         }
 
         window.addEventListener('load', () => {
@@ -185,19 +198,21 @@
             const token = fragment.get('access_token');
 
             if (token) {
-                showLoading("유저 정보를 불러오는 중...");
+                showLoading("유저 정보를 검증하고 있습니다...");
                 fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
                 .then(res => res.json())
                 .then(user => {
                     const isAdmin = (user.username === ADMIN_ID);
                     document.getElementById('user-area').innerHTML = `
-                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="32" style="border-radius:50%">
+                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="32" height="32" style="border-radius:50%">
                         <span style="font-weight:700;">${user.username} ${isAdmin ? '<span style="color:#ff4757; font-size:0.7rem;">[ADMIN]</span>' : ''}</span>
                         <button class="login-btn logout-btn" onclick="startLogout()">로그아웃</button>
                     `;
-                    if(isAdmin) document.querySelectorAll('[id^="edit-"]').forEach(btn => btn.style.display = 'inline-block');
+                    if(isAdmin) {
+                        document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = 'inline-block');
+                    }
                     document.getElementById('loading-overlay').style.display = 'none';
-                    window.history.replaceState({}, document.title, "/");
+                    window.history.replaceState({}, document.title, window.location.pathname);
                 });
             }
         });
@@ -206,7 +221,9 @@
             const area = document.getElementById(type + '-admin');
             const isHidden = (area.style.display === 'none' || area.style.display === '');
             area.style.display = isHidden ? 'flex' : 'none';
-            if(isHidden) document.getElementById(type + '-input').value = document.getElementById(type + '-content').innerText;
+            if(isHidden) {
+                document.getElementById(type + '-input').value = document.getElementById(type + '-content').innerText;
+            }
         }
     </script>
 </body>
