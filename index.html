@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MidCore Server | 공식 홈페이지</title>
+    <title>MidCore Server | web.midcore.shop</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -19,127 +19,194 @@
         }
 
         body { background-color: var(--bg-color); color: var(--text-main); font-family: "Pretendard", sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
+
+        /* 로딩 애니메이션 오버레이 */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 12, 0.95); display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10000;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #loading-text { margin-top: 20px; font-weight: 600; letter-spacing: 1px; }
+
         nav { width: 100%; max-width: 1000px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
-        .user-area { display: flex; align-items: center; gap: 10px; }
-        .login-btn { border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .user-area { display: flex; align-items: center; gap: 12px; }
+        .login-btn { border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .discord-btn { background: #5865F2; color: #fff; }
-        .logout-btn { background: #333; color: #fff; padding: 6px 12px; font-size: 0.8rem; border-radius: 5px; }
+        .logout-btn { background: #333; color: #fff; font-size: 0.8rem; padding: 6px 12px; }
 
         header { width: 100%; max-width: 800px; padding: 60px 20px; text-align: center; }
-        header h1 { font-size: 4rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #ffffff, #00a8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
+        header h1 { font-size: 4rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #fff, #00a8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .content { width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 40px 0 20px 0; }
-        .section-title { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 20px; position: relative; }
-        .admin-badge { background: var(--admin-color); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
-        
-        .admin-edit-area { display: none; margin-top: 15px; flex-direction: column; gap: 10px; }
-        .admin-edit-area textarea { background: #000; color: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-family: inherit; resize: vertical; }
-        .save-btn { background: var(--accent-color); color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+        .content { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+        .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
 
-        footer { margin: 80px 0 50px 0; color: var(--text-sub); font-size: 0.9rem; }
+        /* 랭킹 스타일 */
+        .rank-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
+        .rank-item:last-child { border: none; }
+        .rank-number { font-weight: 800; color: var(--accent-color); width: 30px; }
+        .rank-name { flex-grow: 1; margin-left: 10px; }
+        .rank-value { font-weight: 600; color: #ffd700; }
+
+        /* 관리자 편집 모드 */
+        .admin-controls { display: none; flex-direction: column; gap: 10px; margin-top: 15px; }
+        textarea { width: 100%; background: #000; color: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; font-family: inherit; }
+        .save-btn { background: var(--admin-color); color: #fff; border: none; padding: 8px; border-radius: 5px; cursor: pointer; }
+
+        @media (max-width: 800px) { .content { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div id="loading-text">데이터 처리 중...</div>
+    </div>
+
     <nav>
-        <div style="font-weight: 900; font-size: 1.4rem;">MIDCORE</div>
+        <div style="font-weight: 900; font-size: 1.5rem;">MIDCORE</div>
         <div class="user-area" id="user-area">
-            <button class="login-btn discord-btn" onclick="loginWithDiscord()">
-                <i class="fab fa-discord"></i> Discord 로그인
-            </button>
+            <button class="login-btn discord-btn" onclick="startLogin()"><i class="fab fa-discord"></i> 로그인</button>
         </div>
     </nav>
 
     <header>
-        <h1>MIDCORE</h1>
-        <p style="color: var(--text-sub);">공식 홈페이지 | midcore.shop</p>
+        <h1>MIDCORE SHOP</h1>
+        <p style="color: var(--text-sub);">공식 홈페이지 | web.midcore.shop</p>
     </header>
 
     <div class="content">
-        <div class="section-header">
-            <div class="section-title"><i class="fa-solid fa-scroll"></i> 패치노트</div>
-            <button id="admin-patch-btn" class="login-btn" style="display:none; background:var(--admin-color); font-size:0.8rem; padding:5px 10px;" onclick="toggleEdit('patch-edit')">편집</button>
-        </div>
-        <div class="card">
-            <div id="patch-display" style="white-space: pre-wrap;">패치노트 내용을 불러오는 중...</div>
-            <div id="patch-edit" class="admin-edit-area">
-                <textarea id="patch-input" rows="5"></textarea>
-                <button class="save-btn" onclick="saveContent('patch')">저장하기</button>
+        <div>
+            <div class="section-title">📜 패치노트 <button id="edit-patch" style="display:none;" onclick="toggleEdit('patch')">편집</button></div>
+            <div class="card">
+                <div id="patch-content" style="white-space: pre-wrap;">불러오는 중...</div>
+                <div id="patch-admin" class="admin-controls">
+                    <textarea id="patch-input" rows="5"></textarea>
+                    <button class="save-btn" onclick="dbSave('patch')">업데이트 게시</button>
+                </div>
+            </div>
+
+            <div class="section-title">📢 서버 공지 <button id="edit-notice" style="display:none;" onclick="toggleEdit('notice')">편집</button></div>
+            <div class="card" style="border-left: 4px solid var(--accent-color);">
+                <div id="notice-content" style="white-space: pre-wrap;">불러오는 중...</div>
+                <div id="notice-admin" class="admin-controls">
+                    <textarea id="notice-input" rows="3"></textarea>
+                    <button class="save-btn" onclick="dbSave('notice')">공지 등록</button>
+                </div>
             </div>
         </div>
 
-        <div class="section-header">
-            <div class="section-title"><i class="fa-solid fa-bullhorn"></i> 서버 공지</div>
-            <button id="admin-notice-btn" class="login-btn" style="display:none; background:var(--admin-color); font-size:0.8rem; padding:5px 10px;" onclick="toggleEdit('notice-edit')">편집</button>
-        </div>
-        <div class="card">
-            <div id="notice-display" style="white-space: pre-wrap;">공지사항 내용을 불러오는 중...</div>
-            <div id="notice-edit" class="admin-edit-area">
-                <textarea id="notice-input" rows="5"></textarea>
-                <button class="save-btn" onclick="saveContent('notice')">저장하기</button>
+        <div>
+            <div class="section-title">🏆 후원 랭킹 <button id="edit-rank" style="display:none;" onclick="toggleEdit('rank')">편집</button></div>
+            <div class="card">
+                <div id="rank-content">데이터가 없습니다.</div>
+                <div id="rank-admin" class="admin-controls">
+                    <p style="font-size:0.8rem; color:var(--text-sub);">형식: 이름:금액 (한줄에 하나씩)</p>
+                    <textarea id="rank-input" rows="10"></textarea>
+                    <button class="save-btn" onclick="dbSave('rank')">랭킹 갱신</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>&copy; 2026 MidCore Server.</footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "본인의_API_KEY",
+            databaseURL: "본인의_DB_URL",
+            projectId: "본인의_ID",
+            appId: "본인의_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // 실시간 데이터 불러오기
+        const dbPaths = ['patch', 'notice', 'rank'];
+        dbPaths.forEach(path => {
+            onValue(ref(db, 'midcore/' + path), (snapshot) => {
+                const data = snapshot.val() || "내용이 없습니다.";
+                if(path === 'rank') renderRank(data);
+                else document.getElementById(path + '-content').innerText = data;
+            });
+        });
+
+        function renderRank(data) {
+            const container = document.getElementById('rank-content');
+            if(data === "내용이 없습니다.") { container.innerHTML = data; return; }
+            const lines = data.split('\n');
+            let html = '';
+            lines.forEach((line, i) => {
+                const [name, val] = line.split(':');
+                if(name && val) html += `<div class="rank-item"><span class="rank-number">${i+1}</span><span class="rank-name">${name}</span><span class="rank-value">${val}</span></div>`;
+            });
+            container.innerHTML = html || "형식이 올바르지 않습니다.";
+        }
+
+        window.dbSave = (path) => {
+            const val = document.getElementById(path + '-input').value;
+            set(ref(db, 'midcore/' + path), val).then(() => {
+                alert('DB 업데이트 완료!');
+                toggleEdit(path);
+            });
+        };
+    </script>
 
     <script>
         const CLIENT_ID = "1460982956842680523";
-        const REDIRECT_URI = "https://midcore.shop/"; // 도메인 주소로 고정
-        const ADMIN_USERNAME = "qwerty";
+        const REDIRECT_URI = "https://web.midcore.shop/";
+        const ADMIN_ID = "suta.525";
 
-        window.onload = () => {
-            document.getElementById('patch-display').innerText = localStorage.getItem('patch-content') || "패치노트가 없습니다.";
-            document.getElementById('notice-display').innerText = localStorage.getItem('notice-content') || "공지사항이 없습니다.";
-            checkLogin();
-        };
-
-        function loginWithDiscord() {
-            const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-            window.location.href = url;
+        function showLoading(text) {
+            document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('loading-text').innerText = text;
         }
 
-        function checkLogin() {
-            const fragment = new URLSearchParams(window.location.hash.slice(1));
-            const accessToken = fragment.get('access_token');
+        function startLogin() {
+            showLoading("디스코드 연결 중...");
+            setTimeout(() => {
+                location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+            }, 800);
+        }
 
-            if (accessToken) {
-                fetch('https://discord.com/api/users/@me', {
-                    headers: { authorization: `Bearer ${accessToken}` }
-                })
+        function startLogout() {
+            showLoading("로그아웃 중...");
+            setTimeout(() => {
+                location.href = window.location.pathname;
+            }, 1000);
+        }
+
+        window.addEventListener('load', () => {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const token = fragment.get('access_token');
+
+            if (token) {
+                showLoading("유저 정보를 불러오는 중...");
+                fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
                 .then(res => res.json())
                 .then(user => {
-                    if (user.username) {
-                        let isAdmin = (user.username === ADMIN_USERNAME);
-                        document.getElementById('user-area').innerHTML = `
-                            <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="30" style="border-radius:50%">
-                            <span style="font-weight:600;">${user.username}${isAdmin ? '<span class="admin-badge">Admin</span>' : ''}</span>
-                            <button class="logout-btn" onclick="location.href='/'">로그아웃</button>
-                        `;
-                        if (isAdmin) {
-                            document.getElementById('admin-patch-btn').style.display = 'block';
-                            document.getElementById('admin-notice-btn').style.display = 'block';
-                        }
-                    }
-                    window.history.replaceState({}, document.title, window.location.pathname);
+                    const isAdmin = (user.username === ADMIN_ID);
+                    document.getElementById('user-area').innerHTML = `
+                        <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" width="32" style="border-radius:50%">
+                        <span style="font-weight:700;">${user.username} ${isAdmin ? '<span style="color:#ff4757; font-size:0.7rem;">[ADMIN]</span>' : ''}</span>
+                        <button class="login-btn logout-btn" onclick="startLogout()">로그아웃</button>
+                    `;
+                    if(isAdmin) document.querySelectorAll('[id^="edit-"]').forEach(btn => btn.style.display = 'inline-block');
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    window.history.replaceState({}, document.title, "/");
                 });
             }
-        }
+        });
 
-        function toggleEdit(id) {
-            const el = document.getElementById(id);
-            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
-        }
-
-        function saveContent(type) {
-            const content = document.getElementById(`${type}-input`).value;
-            localStorage.setItem(`${type}-content`, content);
-            document.getElementById(`${type}-display`).innerText = content;
-            document.getElementById(`${type}-edit`).style.display = 'none';
-            alert('저장되었습니다.');
+        function toggleEdit(type) {
+            const area = document.getElementById(type + '-admin');
+            const isHidden = (area.style.display === 'none' || area.style.display === '');
+            area.style.display = isHidden ? 'flex' : 'none';
+            if(isHidden) document.getElementById(type + '-input').value = document.getElementById(type + '-content').innerText;
         }
     </script>
 </body>
