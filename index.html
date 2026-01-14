@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MidCore | 유럽 국가전쟁</title>
+    <title>MidCore | 유럽 국가전쟁 서버</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --bg-color: #0a0a0c; --card-bg: #161618; --accent-color: #00a8ff; --text-main: #ffffff; --text-sub: #a0a0a2; --border-color: #2a2a2c; --warning-color: #ff4757; }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: "Pretendard", sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
 
-        /* 로딩 애니메이션 */
+        /* 로딩 레이어 */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 12, 0.98); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
         .spinner { width: 40px; height: 40px; border: 4px solid #333; border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -25,9 +25,9 @@
         .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
         .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         
-        /* 리소스팩 다운로드 박스 */
-        .download-box { background: linear-gradient(135deg, rgba(0, 168, 255, 0.15) 0%, rgba(0, 168, 255, 0.05) 100%); border: 1px solid var(--accent-color); border-radius: 15px; padding: 30px; text-align: center; margin-top: 10px; }
-        .download-btn { display: inline-block; background: var(--accent-color); color: #fff; padding: 16px 32px; border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 1.1rem; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3); }
+        /* 리소스팩 강조 박스 */
+        .download-box { background: linear-gradient(135deg, rgba(0, 168, 255, 0.15) 0%, rgba(0, 168, 255, 0.05) 100%); border: 1px solid var(--accent-color); border-radius: 15px; padding: 30px; text-align: center; }
+        .download-btn { display: inline-block; background: var(--accent-color); color: #fff; padding: 16px 32px; border-radius: 10px; text-decoration: none; font-weight: 800; font-size: 1.1rem; margin-top: 15px; transition: 0.3s; cursor: pointer; border: none; }
         .download-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 168, 255, 0.5); }
 
         .rule-card { border-left: 5px solid var(--warning-color); }
@@ -48,7 +48,7 @@
     </div>
 
     <nav>
-        <div style="font-weight: 900; font-size: 1.6rem; color: #ff4757;">MIDCORE</div>
+        <div style="font-weight: 900; font-size: 1.6rem; color: #ff4757; letter-spacing: -1px;">MIDCORE</div>
         <div id="user-area">
             <button class="login-btn" onclick="handleLogin()"><i class="fab fa-discord"></i> 로그인</button>
         </div>
@@ -56,7 +56,7 @@
 
     <header>
         <h1>MIDCORE WAR</h1>
-        <p style="color: var(--text-sub);">유럽 대륙의 패권을 차지하기 위한 국가 전쟁</p>
+        <p style="color: var(--text-sub);">지구 맵 기반 유럽 국가 전쟁</p>
     </header>
 
     <div class="content">
@@ -64,43 +64,43 @@
             <div class="section-title"><i class="fas fa-download"></i> 리소스팩 필수 설치</div>
             <div class="card">
                 <div class="download-box">
-                    <p style="margin: 0; font-size: 1.1rem; font-weight: 600;">코어 점령 및 특수 시스템 구현을 위해 필수입니다.</p>
-                    <p style="font-size: 0.9rem; color: var(--text-sub); margin-top: 8px;">※ 반드시 PC 환경에서 다운로드 후 마인크래프트에 적용하세요.</p>
+                    <p style="margin: 0; font-size: 1.1rem; font-weight: 600;">코어 점령 및 시스템 정상 이용을 위해 필수입니다.</p>
+                    <p style="font-size: 0.9rem; color: var(--text-sub); margin-top: 8px;">※ 반드시 PC에서 다운로드 후 적용하세요.</p>
                     
-                    <a href="https://www.dropbox.com/scl/fi/a2068d6rk990p163xwapm/midcore.zip?rlkey=0at4r06ywvib8n7pjtrimm7m6&st=lo14fyxk&dl=1" class="download-btn">
+                    <button class="download-btn" onclick="forceDownload()">
                         <i class="fas fa-file-download"></i> 리소스팩 즉시 다운로드
-                    </a>
+                    </button>
                 </div>
             </div>
 
             <div class="section-title"><i class="fas fa-map-marked-alt"></i> 서버 소개</div>
             <div class="card">
                 <p style="line-height: 1.8; margin: 0; color: #ddd;">
-                    실제 지구 맵 기반의 유럽 대륙에서 국가를 건설하세요. <br>
+                    실제 지구 지형을 바탕으로 제작된 유럽 대륙에서 국가를 건설하세요. <br>
                     상대 국가의 <b>코어(Core)</b>를 찾아 파괴하는 것이 승리의 열쇠입니다. <br><br>
                     <small style="color: var(--text-sub);">* 서버는 후원금과 홈페이지 광고 수익으로 운영됩니다.</small>
                 </p>
             </div>
 
-            <div class="section-title"><i class="fas fa-shield-alt" style="color: var(--warning-color);"></i> 국가전쟁 행동 강령</div>
+            <div class="section-title"><i class="fas fa-shield-alt" style="color: var(--warning-color);"></i> 서버 규칙 (영구 밴 대상)</div>
             <div class="card rule-card">
                 <div class="rule-item">
                     <b>🚫 핵 / 치트 프로그램 금지</b>
-                    <p style="font-size: 0.9rem; color: var(--text-sub);">강력한 안티치트 상시 가동. 적발 시 <b>경고 없이 영구 밴</b> 조치됩니다.</p>
+                    <p style="font-size: 0.9rem; color: var(--text-sub);">안티치트 상시 가동 중. 적발 시 <b>경고 없이 즉시 영구 밴</b> 조치됩니다.</p>
                 </div>
                 <div class="rule-item">
-                    <b>🚫 무분별한 테러 금지</b>
-                    <p style="font-size: 0.9rem; color: var(--text-sub);">반복적 파괴, 운영 방해 행위는 즉시 제재됩니다.</p>
+                    <b>🚫 테러 및 운영 방해 금지</b>
+                    <p style="font-size: 0.9rem; color: var(--text-sub);">무분별한 파괴 행위는 즉시 제재 대상입니다.</p>
                 </div>
                 <div class="rule-item" style="margin:0">
-                    <b>🚫 국가 간 동맹 금지 (적발 시 즉시 밴)</b>
-                    <p style="font-size: 0.9rem; color: var(--text-sub);">비밀 동맹, 담합, 불가침 조약은 게임의 재미를 해치는 행위로 간주하여 <b>영구 밴</b> 처리합니다.</p>
+                    <b>🚫 국가 간 동맹 절대 금지</b>
+                    <p style="font-size: 0.9rem; color: var(--text-sub);">국가 간 동맹, 담합, 불가침 조약은 발견 즉시 <b>사전 경고 없이 영구 밴</b> 처리합니다.</p>
                 </div>
             </div>
         </div>
 
         <div>
-            <div class="section-title"><i class="fas fa-crown" style="color: #ffd700;"></i> 후원자 명예의 전당</div>
+            <div class="section-title"><i class="fas fa-crown" style="color: #ffd700;"></i> 후원 랭킹</div>
             <div class="card" id="rank-content">로딩 중...</div>
 
             <div class="section-title"><i class="fas fa-bullhorn"></i> 서버 공지</div>
@@ -114,6 +114,12 @@
     <script>
         const CLIENT_ID = "1460982956842680523";
         const REDIRECT_URI = "https://web.midcore.shop/";
+        const DROPBOX_URL = "https://www.dropbox.com/scl/fi/a2068d6rk990p163xwapm/midcore.zip?rlkey=0at4r06ywvib8n7pjtrimm7m6&st=lo14fyxk&dl=1";
+
+        // 리소스팩 다운로드 강제 함수
+        function forceDownload() {
+            window.location.href = DROPBOX_URL;
+        }
 
         function showLoading(text) {
             document.getElementById('loading-overlay').style.display = 'flex';
