@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MidCore | 유럽 국가전쟁</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9091580494447632" crossorigin="anonymous"></script>
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -27,7 +25,6 @@
         .nav-links { display: flex; gap: 25px; align-items: center; }
         .nav-item { color: var(--text-sub); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.2s; }
         .nav-item:hover { color: var(--text-main); }
-        .nav-item.highlight { color: var(--shop-color); display: flex; align-items: center; gap: 6px; }
 
         .login-btn { background: #5865F2; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .login-btn:hover { background: #4752c4; }
@@ -43,35 +40,22 @@
         /* 후원 안내 테이블 */
         .shop-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .shop-table th, .shop-table td { padding: 15px; border-bottom: 1px solid var(--border-color); text-align: left; }
-        .shop-table th { color: var(--text-sub); font-size: 0.85rem; font-weight: 500; }
         .shop-table tbody tr { cursor: pointer; transition: 0.2s; }
-        .shop-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
-        
-        .rank-sky { color: #5dade2; font-weight: bold; }
-        .rank-plus { color: #58d68d; font-weight: bold; }
-        .rank-god { color: #f4d03f; font-weight: bold; }
+        .shop-table tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
 
-        /* 모달 스타일 추가 */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter: blur(5px); }
-        .modal-card { background: var(--card-bg); border: 1px solid var(--accent-color); border-radius: 20px; width: 90%; max-width: 500px; padding: 30px; position: relative; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* 모달 스타일 */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter: blur(8px); }
+        .modal-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; width: 90%; max-width: 500px; padding: 35px; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal-close { position: absolute; top: 20px; right: 20px; color: var(--text-sub); cursor: pointer; font-size: 1.5rem; }
-        .benefit-list { list-style: none; padding: 0; margin: 20px 0; }
-        .benefit-list li { padding: 10px 0; border-bottom: 1px solid #222; display: flex; align-items: center; gap: 10px; }
-        .benefit-list li i { color: var(--accent-color); font-size: 0.8rem; }
+        .benefit-list { list-style: none; padding: 0; margin: 25px 0; }
+        .benefit-list li { padding: 12px 0; border-bottom: 1px solid #222; display: flex; align-items: flex-start; gap: 12px; line-height: 1.5; }
+        .benefit-list li i { margin-top: 4px; }
 
-        .warning-box { background: rgba(255, 71, 87, 0.08); border: 1px dashed var(--warning-color); border-radius: 15px; padding: 20px; margin-top: 20px; }
         .account-box { background: #1e1e21; padding: 25px; border-radius: 15px; border: 1px solid var(--shop-color); text-align: center; margin-top: 20px; }
         .account-number { font-size: 1.4rem; font-weight: 900; color: var(--shop-color); letter-spacing: 0.5px; }
 
-        .sidebar-column { position: sticky; top: 100px; height: fit-content; }
-        .ad-label { font-size: 10px; color: #444; text-align: center; margin-bottom: 8px; letter-spacing: 1px; font-weight: bold; }
-
-        @media (max-width: 900px) { 
-            .content { grid-template-columns: 1fr; } 
-            .sidebar-column { position: static; }
-            nav { flex-direction: column; padding: 15px; gap: 15px; }
-        }
+        @media (max-width: 900px) { .content { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -79,8 +63,7 @@
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
             <i class="fas fa-times modal-close" onclick="closeModal()"></i>
-            <div id="modalContent">
-                </div>
+            <div id="modalContent"></div>
         </div>
     </div>
 
@@ -88,53 +71,35 @@
         <div style="font-weight: 900; font-size: 1.6rem; color: #ff4757;">MIDCORE</div>
         <div class="nav-links">
             <a href="#" class="nav-item">홈</a>
-            <a href="#support" class="nav-item highlight"><i class="fas fa-shopping-cart"></i> 후원안내</a>
             <div id="user-area"><button class="login-btn" onclick="handleLogin()"><i class="fab fa-discord"></i> 로그인</button></div>
         </div>
     </nav>
 
     <header>
         <h1>MIDCORE WAR</h1>
-        <p style="color: var(--text-sub); margin-top: 5px;">유럽 국가 전쟁 • 지구 맵 • 자체 후원 시스템</p>
+        <p style="color: var(--text-sub); margin-top: 5px;">유럽 국가 전쟁 • 지구 맵 • 최상위 후원 시스템</p>
     </header>
 
     <div class="content">
         <div>
-            <div class="section-title"><i class="fas fa-file-download"></i> 리소스팩 설치 (필수)</div>
-            <div class="card">
-                <div style="text-align: center;">
-                    <p style="margin-bottom: 15px; font-weight: 600;">코어 시스템 정상 작동을 위해 반드시 필요합니다.</p>
-                    <button class="login-btn" style="width:100%; justify-content: center; background: var(--accent-color);" onclick="location.href='https://www.dropbox.com/scl/fi/a2068d6rk990p163xwapm/midcore.zip?rlkey=0at4r06ywvib8n7pjtrimm7m6&st=lo14fyxk&dl=1'">
-                        리소스팩 즉시 다운로드
-                    </button>
-                </div>
-            </div>
-
-            <div id="support" class="section-title"><i class="fas fa-heart"></i> 서버 후원 안내 (클릭 시 상세보기)</div>
+            <div id="support" class="section-title"><i class="fas fa-heart"></i> 서버 후원 등급 (클릭 시 상세보기)</div>
             <div class="card">
                 <table class="shop-table">
                     <thead>
-                        <tr><th>등급</th><th>이름</th><th>주요 혜택</th><th>금액</th></tr>
+                        <tr><th>등급</th><th>이름</th><th>핵심 혜택</th><th>금액</th></tr>
                     </thead>
                     <tbody>
-                        <tr onclick="showRank('sky')"><td><i class="fas fa-cloud" style="color:#5dade2;"></i></td><td class="rank-sky">Sky</td><td>기본 칭호, 전용 키트</td><td>5,000₩</td></tr>
-                        <tr onclick="showRank('plus')"><td><i class="fas fa-cloud-sun" style="color:#58d68d;"></i></td><td class="rank-plus">SkyPlus</td><td>Sky 혜택 + 추가 보너스</td><td>15,000₩</td></tr>
-                        <tr onclick="showRank('god')"><td><i class="fas fa-crown" style="color:#f4d03f;"></i></td><td class="rank-god">SkyGod</td><td>최고 등급, 전체 공지권</td><td>30,000₩</td></tr>
+                        <tr onclick="showRank('sky')"><td><i class="fas fa-cloud" style="color:#5dade2;"></i></td><td style="color:#5dade2; font-weight:bold;">Sky</td><td>기본 칭호, 1분당 10원</td><td>10,000₩</td></tr>
+                        <tr onclick="showRank('plus')"><td><i class="fas fa-cloud-sun" style="color:#58d68d;"></i></td><td style="color:#58d68d; font-weight:bold;">Sky Plus</td><td>추가 수익, 홈 확장</td><td>20,000₩</td></tr>
+                        <tr onclick="showRank('premium')"><td><i class="fas fa-crown" style="color:#f4d03f;"></i></td><td style="color:#f4d03f; font-weight:bold;">Sky Premium</td><td>1분당 30원, 무제한 잠수</td><td>30,000₩</td></tr>
+                        <tr onclick="showRank('god')"><td><i class="fas fa-gem" style="color:#ff4757;"></i></td><td style="color:#ff4757; font-weight:bold;">Sky God</td><td>1분당 50원, /repair 권한</td><td>40,000₩</td></tr>
                     </tbody>
                 </table>
-
-                <div class="warning-box">
-                    <h4 style="margin: 0 0 10px 0; color: var(--warning-color);"><i class="fas fa-exclamation-circle"></i> 입금 전 꼭 확인해주세요!</h4>
-                    <ul style="margin: 0; padding-left: 18px; font-size: 0.9rem; line-height: 1.7; color: #ddd;">
-                        <li><b>구매 가능 시간:</b> <span style="color: var(--shop-color);">오전 09:00 ~ 오후 21:00</span></li>
-                        <li><b>입금자 성함:</b> 받는 분 통장에 <span style="color: var(--shop-color);">본인의 마인크래프트 닉네임</span>을 적어주세요.</li>
-                        <li>입금 후 디스코드 문의 채널에 영수증을 남겨주시면 처리가 빠릅니다.</li>
-                    </ul>
-                </div>
 
                 <div class="account-box">
                     <p style="margin:0 0 10px 0; font-size:0.9rem; color:var(--text-sub);">무통장 입금 계좌</p>
                     <div class="account-number">토스뱅크 1000-XXXX-XXXX</div>
+                    <p style="margin-top:10px; font-size:0.85rem; color:var(--text-sub);">입금 후 디스코드 문의 채널에 영수증을 남겨주세요.</p>
                 </div>
             </div>
         </div>
@@ -146,81 +111,68 @@
                     <img src="https://minelist.kr/servers/16884/banner/modern.png" style="width: 100%; border-radius: 10px;">
                 </a>
             </div>
-
-            <div class="section-title"><i class="fas fa-crown" style="color: #ffd700;"></i> 후원 랭킹</div>
-            <div class="card" id="rank-content" style="margin-bottom: 25px;">로딩 중...</div>
-
-            <div class="ad-label">GOOGLE ADSENSE</div>
-            <div class="card" style="min-height: 200px; display: flex; align-items: center; justify-content: center; border-style: dashed; border-color: #333;">
-                <p style="color: #444; font-size: 12px;">광고 구역</p>
-            </div>
         </div>
     </div>
 
     <script>
-        const CLIENT_ID = "1460982956842680523";
-        const REDIRECT_URI = "https://web.midcore.shop/";
-
-        // 등급별 상세 데이터
         const rankData = {
             sky: {
-                title: "Sky 등급",
-                price: "5,000₩",
-                color: "#5dade2",
-                benefits: ["전용 채팅 칭호 [Sky]", "Sky 전용 기본 키트 지급", "기본 창고 확장 (1페이지)", "접속 시 환영 메시지"]
+                title: "Sky 등급", price: "10,000₩ (2개월)", color: "#5dade2",
+                benefits: [
+                    "✨ [기본 수익] 서버 접속 중 1분마다 10원 지급",
+                    "📛 [전용 칭호] 이름 앞에 [Sky] 칭호 부여",
+                    "📦 [개인 창고] 개인 창고(/pv 1) 1페이지 제공",
+                    "📢 [입장 알림] 접속 시 전용 메시지 출력"
+                ]
             },
             plus: {
-                title: "SkyPlus 등급",
-                price: "15,000₩",
-                color: "#58d68d",
-                benefits: ["전용 채팅 칭호 [Sky+]", "Sky 혜택 모두 포함", "전용 무기 키트 지급", "개인 가방 확장 (3페이지)", "닉네임 색상 변경 권한"]
+                title: "Sky Plus 등급", price: "20,000₩ (2개월)", color: "#58d68d",
+                benefits: [
+                    "✨ [추가 수익] 서버 접속 중 1분마다 15원 지급",
+                    "🏠 [홈 확장] /sethome 가능 개수 5개로 확장",
+                    "📛 [전용 칭호] 이름 앞에 [Sky Plus] 칭호 부여",
+                    "🎨 [이름 색상] 채팅 시 닉네임 색상 변경 권한"
+                ]
+            },
+            premium: {
+                title: "Sky Premium 등급", price: "30,000₩ (2개월)", color: "#f4d03f",
+                benefits: [
+                    "✨ [최고 수익] 서버 접속 중 1분마다 30원 자동 지급",
+                    "💤 [잠수 무제한] 24시간 서버 접속 유지 가능",
+                    "🗑️ [편의 기능] 전용 /쓰레기통 명령어 권한",
+                    "📛 [특별 칭호] [SkyPremium] 전용 칭호 부여",
+                    "🚀 [우선 입장] 서버가 꽉 차도 즉시 입장 권한"
+                ]
             },
             god: {
-                title: "SkyGod 등급",
-                price: "30,000₩",
-                color: "#f4d03f",
-                benefits: ["전용 채팅 칭호 [SkyGod]", "모든 하위 등급 혜택 포함", "서버 전체 공지권 (/alert)", "비행 권한 (/fly) - 로비전용", "전용 이펙트 및 파티클", "특별 제작 무기 스킨"]
+                title: "Sky God 등급", price: "40,000₩ (2개월)", color: "#ff4757",
+                benefits: [
+                    "✨ [압도적 수익] 서버 접속 중 1분마다 50원 지급",
+                    "💤 [잠수 무제한] 서버 강퇴 면제 및 24시간 잠수",
+                    "🛠️ [아이템 수리] 즉시 수리 명령어 /repair 권한",
+                    "📛 [황금 칭호] [SkyGod] 황금빛 전용 칭호 부여",
+                    "🚀 [우선 입장] 인원이 꽉 찬 서버도 즉시 입장 가능",
+                    "👑 [최상위] 서버 운영을 돕는 최후의 예우 등급"
+                ]
             }
         };
 
         function showRank(type) {
             const data = rankData[type];
             const content = `
-                <h2 style="color:${data.color}; margin-top:0;">${data.title}</h2>
-                <p style="font-size:1.2rem; font-weight:bold; color:var(--shop-color);">${data.price}</p>
+                <h2 style="color:${data.color}; margin:0 0 10px 0; font-size:1.8rem;">${data.title}</h2>
+                <div style="display:inline-block; background:rgba(255,215,0,0.1); color:var(--shop-color); padding:5px 15px; border-radius:50px; font-weight:bold; font-size:1.1rem;">${data.price}</div>
                 <ul class="benefit-list">
-                    ${data.benefits.map(b => `<li><i class="fas fa-check"></i> ${b}</li>`).join('')}
+                    ${data.benefits.map(b => `<li><i class="fas fa-check-circle" style="color:${data.color}"></i> <span>${b}</span></li>`).join('')}
                 </ul>
-                <button class="login-btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="closeModal()">닫기</button>
+                <button class="login-btn" style="width:100%; justify-content:center; padding:15px; font-size:1rem;" onclick="closeModal()">확인 완료</button>
             `;
             document.getElementById('modalContent').innerHTML = content;
             document.getElementById('modalOverlay').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-        }
-
-        function handleLogin() {
-            location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-        }
-
-        async function loadData() {
-            try {
-                // 실제 연동 시 rank.json이 필요합니다.
-                const rankRes = await fetch('rank.json');
-                const rank = await rankRes.json();
-                document.getElementById('rank-content').innerHTML = rank.map((u, i) => `
-                    <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222; font-size:0.9rem;">
-                        <span><b style="color:var(--accent-color); margin-right:5px;">${i+1}</b> ${u.name}</span>
-                        <span style="color:#ffd700; font-weight:700;">${Number(u.value).toLocaleString()} ₩</span>
-                    </div>`).join('') || "데이터 없음";
-            } catch (e) { 
-                document.getElementById('rank-content').innerHTML = "데이터를 불러올 수 없습니다.";
-            }
-        }
-
-        window.onload = loadData;
+        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+        function handleLogin() { alert('디스코드 로그인 연동 준비 중입니다.'); }
     </script>
 </body>
 </html>
