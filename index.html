@@ -44,11 +44,22 @@
         .shop-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .shop-table th, .shop-table td { padding: 15px; border-bottom: 1px solid var(--border-color); text-align: left; }
         .shop-table th { color: var(--text-sub); font-size: 0.85rem; font-weight: 500; }
+        .shop-table tbody tr { cursor: pointer; transition: 0.2s; }
+        .shop-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+        
         .rank-sky { color: #5dade2; font-weight: bold; }
         .rank-plus { color: #58d68d; font-weight: bold; }
         .rank-god { color: #f4d03f; font-weight: bold; }
 
-        /* 주의사항 및 계좌박스 */
+        /* 모달 스타일 추가 */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter: blur(5px); }
+        .modal-card { background: var(--card-bg); border: 1px solid var(--accent-color); border-radius: 20px; width: 90%; max-width: 500px; padding: 30px; position: relative; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-close { position: absolute; top: 20px; right: 20px; color: var(--text-sub); cursor: pointer; font-size: 1.5rem; }
+        .benefit-list { list-style: none; padding: 0; margin: 20px 0; }
+        .benefit-list li { padding: 10px 0; border-bottom: 1px solid #222; display: flex; align-items: center; gap: 10px; }
+        .benefit-list li i { color: var(--accent-color); font-size: 0.8rem; }
+
         .warning-box { background: rgba(255, 71, 87, 0.08); border: 1px dashed var(--warning-color); border-radius: 15px; padding: 20px; margin-top: 20px; }
         .account-box { background: #1e1e21; padding: 25px; border-radius: 15px; border: 1px solid var(--shop-color); text-align: center; margin-top: 20px; }
         .account-number { font-size: 1.4rem; font-weight: 900; color: var(--shop-color); letter-spacing: 0.5px; }
@@ -64,6 +75,14 @@
     </style>
 </head>
 <body>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <i class="fas fa-times modal-close" onclick="closeModal()"></i>
+            <div id="modalContent">
+                </div>
+        </div>
+    </div>
 
     <nav>
         <div style="font-weight: 900; font-size: 1.6rem; color: #ff4757;">MIDCORE</div>
@@ -91,16 +110,16 @@
                 </div>
             </div>
 
-            <div id="support" class="section-title"><i class="fas fa-heart"></i> 서버 후원 안내</div>
+            <div id="support" class="section-title"><i class="fas fa-heart"></i> 서버 후원 안내 (클릭 시 상세보기)</div>
             <div class="card">
                 <table class="shop-table">
                     <thead>
-                        <tr><th>등급</th><th>이름</th><th>혜택</th><th>금액</th></tr>
+                        <tr><th>등급</th><th>이름</th><th>주요 혜택</th><th>금액</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><i class="fas fa-cloud" style="color:#5dade2;"></i></td><td class="rank-sky">Sky</td><td>기본 칭호, 전용 키트</td><td>5,000₩</td></tr>
-                        <tr><td><i class="fas fa-cloud-sun" style="color:#58d68d;"></i></td><td class="rank-plus">SkyPlus</td><td>Sky 혜택 + 추가 보너스</td><td>15,000₩</td></tr>
-                        <tr><td><i class="fas fa-crown" style="color:#f4d03f;"></i></td><td class="rank-god">SkyGod</td><td>최고 등급, 전체 공지권</td><td>30,000₩</td></tr>
+                        <tr onclick="showRank('sky')"><td><i class="fas fa-cloud" style="color:#5dade2;"></i></td><td class="rank-sky">Sky</td><td>기본 칭호, 전용 키트</td><td>5,000₩</td></tr>
+                        <tr onclick="showRank('plus')"><td><i class="fas fa-cloud-sun" style="color:#58d68d;"></i></td><td class="rank-plus">SkyPlus</td><td>Sky 혜택 + 추가 보너스</td><td>15,000₩</td></tr>
+                        <tr onclick="showRank('god')"><td><i class="fas fa-crown" style="color:#f4d03f;"></i></td><td class="rank-god">SkyGod</td><td>최고 등급, 전체 공지권</td><td>30,000₩</td></tr>
                     </tbody>
                 </table>
 
@@ -139,9 +158,48 @@
     </div>
 
     <script>
-        // 데이터 로드 및 로그인 로직 (기존과 동일)
         const CLIENT_ID = "1460982956842680523";
         const REDIRECT_URI = "https://web.midcore.shop/";
+
+        // 등급별 상세 데이터
+        const rankData = {
+            sky: {
+                title: "Sky 등급",
+                price: "5,000₩",
+                color: "#5dade2",
+                benefits: ["전용 채팅 칭호 [Sky]", "Sky 전용 기본 키트 지급", "기본 창고 확장 (1페이지)", "접속 시 환영 메시지"]
+            },
+            plus: {
+                title: "SkyPlus 등급",
+                price: "15,000₩",
+                color: "#58d68d",
+                benefits: ["전용 채팅 칭호 [Sky+]", "Sky 혜택 모두 포함", "전용 무기 키트 지급", "개인 가방 확장 (3페이지)", "닉네임 색상 변경 권한"]
+            },
+            god: {
+                title: "SkyGod 등급",
+                price: "30,000₩",
+                color: "#f4d03f",
+                benefits: ["전용 채팅 칭호 [SkyGod]", "모든 하위 등급 혜택 포함", "서버 전체 공지권 (/alert)", "비행 권한 (/fly) - 로비전용", "전용 이펙트 및 파티클", "특별 제작 무기 스킨"]
+            }
+        };
+
+        function showRank(type) {
+            const data = rankData[type];
+            const content = `
+                <h2 style="color:${data.color}; margin-top:0;">${data.title}</h2>
+                <p style="font-size:1.2rem; font-weight:bold; color:var(--shop-color);">${data.price}</p>
+                <ul class="benefit-list">
+                    ${data.benefits.map(b => `<li><i class="fas fa-check"></i> ${b}</li>`).join('')}
+                </ul>
+                <button class="login-btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="closeModal()">닫기</button>
+            `;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
 
         function handleLogin() {
             location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
@@ -149,16 +207,17 @@
 
         async function loadData() {
             try {
-                const [rank, notice] = await Promise.all([
-                    fetch('rank.json').then(r => r.json()),
-                    fetch('notice.json').then(r => r.json())
-                ]);
+                // 실제 연동 시 rank.json이 필요합니다.
+                const rankRes = await fetch('rank.json');
+                const rank = await rankRes.json();
                 document.getElementById('rank-content').innerHTML = rank.map((u, i) => `
                     <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222; font-size:0.9rem;">
                         <span><b style="color:var(--accent-color); margin-right:5px;">${i+1}</b> ${u.name}</span>
                         <span style="color:#ffd700; font-weight:700;">${Number(u.value).toLocaleString()} ₩</span>
                     </div>`).join('') || "데이터 없음";
-            } catch (e) { console.error("Data fail"); }
+            } catch (e) { 
+                document.getElementById('rank-content').innerHTML = "데이터를 불러올 수 없습니다.";
+            }
         }
 
         window.onload = loadData;
