@@ -11,44 +11,38 @@
         :root { 
             --bg-color: #0a0a0c; --card-bg: #161618; --accent-color: #00a8ff; 
             --text-main: #ffffff; --text-sub: #a0a0a2; --border-color: #2a2a2c; 
-            --warning-color: #ff4757; --shop-color: #ffd700; 
+            --warning-color: #ff4757; --shop-color: #ffd700; --discord-color: #5865F2;
         }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: "Pretendard", sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: "Pretendard", sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
 
-        /* 네비게이션 */
-        nav { width: 100%; max-width: 1100px; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; position: sticky; top: 0; background: rgba(10, 10, 12, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border-color); }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-item { color: var(--text-sub); text-decoration: none; font-weight: 600; transition: 0.2s; cursor: pointer; }
-        .nav-item:hover { color: var(--text-main); }
+        /* 네비게이션 & 로그인 */
+        nav { width: 100%; max-width: 1100px; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; position: sticky; top: 0; background: rgba(10, 10, 12, 0.9); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .login-btn { background: var(--discord-color); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none; font-size: 0.9rem; }
+        .login-btn:hover { background: #4752c4; transform: translateY(-2px); }
 
-        .login-btn { background: #5865F2; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
-        .login-btn:hover { background: #4752c4; }
+        header { padding: 50px 20px; text-align: center; }
+        header h1 { font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #fff, var(--warning-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        header { padding: 60px 20px; text-align: center; }
-        header h1 { font-size: 3.5rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #fff, #ff4757); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -2px; }
+        /* 레이아웃 구조 */
+        .content { width: 100%; max-width: 1100px; padding: 20px; box-sizing: border-box; display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; margin-bottom: 20px; }
+        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--accent-color); }
 
-        /* 레이아웃 */
-        .content { width: 100%; max-width: 1100px; padding: 20px; box-sizing: border-box; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--accent-color); }
+        /* 리스트 스타일 (공지/패치/랭킹) */
+        .item-list { list-style: none; padding: 0; margin: 0; }
+        .item-list li { padding: 12px 0; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+        .item-list li:last-child { border: none; }
+        .date { color: var(--text-sub); font-size: 0.8rem; }
 
         /* 후원 테이블 */
-        .shop-table { width: 100%; border-collapse: collapse; }
-        .shop-table th, .shop-table td { padding: 15px; border-bottom: 1px solid var(--border-color); text-align: left; }
-        .shop-table tbody tr { cursor: pointer; transition: 0.2s; }
-        .shop-table tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
+        .shop-table { width: 100%; border-collapse: collapse; cursor: pointer; }
+        .shop-table td { padding: 15px 10px; border-bottom: 1px solid var(--border-color); }
+        .shop-table tr:hover { background: rgba(255,255,255,0.03); }
 
-        /* 리스트 스타일 (공지/패치) */
-        .json-list { list-style: none; padding: 0; margin: 0; }
-        .json-list li { padding: 12px 0; border-bottom: 1px solid #222; font-size: 0.95rem; display: flex; justify-content: space-between; }
-        .date { color: var(--text-sub); font-size: 0.85rem; }
-
-        /* 모달 */
+        /* 모달 스타일 */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:2000; backdrop-filter: blur(8px); }
-        .modal-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; width: 90%; max-width: 500px; padding: 35px; position: relative; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .benefit-list { list-style: none; padding: 0; margin: 25px 0; }
-        .benefit-list li { padding: 10px 0; border-bottom: 1px solid #222; display: flex; gap: 12px; line-height: 1.4; }
+        .modal-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; width: 90%; max-width: 450px; padding: 30px; position: relative; }
+        .benefit-item { display: flex; gap: 10px; margin-bottom: 10px; font-size: 0.95rem; line-height: 1.4; }
 
         @media (max-width: 900px) { .content { grid-template-columns: 1fr; } }
     </style>
@@ -62,51 +56,46 @@
     </div>
 
     <nav>
-        <div style="font-weight: 900; font-size: 1.6rem; color: #ff4757;">MIDCORE</div>
-        <div class="nav-links">
-            <a href="#" class="nav-item">홈</a>
-            <a href="#support" class="nav-item">후원안내</a>
-            <div id="user-area"><button class="login-btn" onclick="handleLogin()"><i class="fab fa-discord"></i> 로그인</button></div>
+        <div style="font-weight: 900; font-size: 1.5rem; color: var(--warning-color);">MIDCORE</div>
+        <div id="user-area">
+            <a href="#" class="login-btn" id="discordLoginBtn"><i class="fab fa-discord"></i> 디스코드 로그인</a>
         </div>
     </nav>
 
     <header>
         <h1>MIDCORE WAR</h1>
-        <p style="color: var(--text-sub);">유럽 국가 전쟁 • 전용 후원 시스템</p>
+        <p style="color: var(--text-sub); margin-top: 10px;">유럽 국가전쟁 • 공식 웹포털</p>
     </header>
 
     <div class="content">
-        <div class="main-column">
-            <div class="section-title"><i class="fas fa-tools"></i> 최신 패치노트</div>
+        <div class="main-col">
+            <div class="section-title"><i class="fas fa-bullhorn"></i> 공지사항</div>
             <div class="card">
-                <ul id="patch-content" class="json-list">데이터를 불러오는 중...</ul>
+                <ul id="notice-list" class="item-list"><li>불러오는 중...</li></ul>
             </div>
 
-            <div id="support" class="section-title"><i class="fas fa-heart"></i> 후원 등급 (클릭 시 상세정보)</div>
+            <div class="section-title"><i class="fas fa-tools"></i> 패치노트</div>
+            <div class="card">
+                <ul id="patch-list" class="item-list"><li>불러오는 중...</li></ul>
+            </div>
+
+            <div class="section-title"><i class="fas fa-shopping-cart"></i> 후원 등급 (클릭 시 상세 혜택)</div>
             <div class="card">
                 <table class="shop-table">
-                    <thead><tr><th>등급</th><th>이름</th><th>핵심 혜택</th><th>금액</th></tr></thead>
-                    <tbody>
-                        <tr onclick="showRank('sky')"><td>☁️</td><td style="color:#5dade2; font-weight:bold;">Sky</td><td>기본 칭호, 1분당 10원</td><td>10,000₩</td></tr>
-                        <tr onclick="showRank('plus')"><td>⛅</td><td style="color:#58d68d; font-weight:bold;">Sky Plus</td><td>수익강화, 홈 확장</td><td>20,000₩</td></tr>
-                        <tr onclick="showRank('premium')"><td>👑</td><td style="color:#f4d03f; font-weight:bold;">Sky Premium</td><td>최고 수익, 무제한 잠수</td><td>30,000₩</td></tr>
-                        <tr onclick="showRank('god')"><td>💎</td><td style="color:#ff4757; font-weight:bold;">Sky God</td><td>압도적 수익, 수리 권한</td><td>40,000₩</td></tr>
-                    </tbody>
+                    <tr onclick="showRank('sky')"><td style="color:#5dade2;">Sky</td><td>기본 수익 & 칭호</td><td style="text-align:right;">10,000₩</td></tr>
+                    <tr onclick="showRank('plus')"><td style="color:#58d68d;">Sky Plus</td><td>중급 수익 & 홈 확장</td><td style="text-align:right;">20,000₩</td></tr>
+                    <tr onclick="showRank('premium')"><td style="color:#f4d03f;">Sky Premium</td><td>최고 수익 & 잠수 무제한</td><td style="text-align:right;">30,000₩</td></tr>
+                    <tr onclick="showRank('god')"><td style="color:#ff4757;">Sky God</td><td>압도적 수익 & 수리 권한</td><td style="text-align:right;">40,000₩</td></tr>
                 </table>
             </div>
         </div>
 
-        <div class="sidebar-column">
-            <div class="section-title"><i class="fas fa-bullhorn"></i> 공지사항</div>
-            <div class="card">
-                <ul id="notice-content" class="json-list">불러오는 중...</ul>
-            </div>
-
+        <div class="side-col">
             <div class="section-title"><i class="fas fa-crown"></i> 후원 랭킹</div>
-            <div class="card" id="rank-content">랭킹 로딩 중...</div>
+            <div class="card" id="rank-list">랭킹 데이터 로딩 중...</div>
 
             <div class="section-title"><i class="fas fa-signal"></i> 서버 상태</div>
-            <div class="card" style="text-align: center; padding: 15px;">
+            <div class="card" style="text-align: center;">
                 <a href="https://minelist.kr/servers/16884" target="_blank">
                     <img src="https://minelist.kr/servers/16884/banner/modern.png" style="width: 100%; border-radius: 10px;">
                 </a>
@@ -115,76 +104,49 @@
     </div>
 
     <script>
+        // 디스코드 설정
         const CLIENT_ID = "1460982956842680523";
-        const REDIRECT_URI = "https://web.midcore.shop/";
+        const REDIRECT_URI = encodeURIComponent("https://web.midcore.shop/");
+        document.getElementById('discordLoginBtn').href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify`;
 
+        // 후원 등급 데이터
         const rankData = {
-            sky: {
-                title: "Sky 등급", price: "10,000₩ (2개월)", color: "#5dade2",
-                benefits: ["✨ [기본 수익] 1분마다 10원 지급", "📛 [Sky] 전용 칭호 부여", "📦 개인 창고(/pv 1) 1개 제공", "🚀 서버 접속 시 전용 메시지"]
-            },
-            plus: {
-                title: "Sky Plus 등급", price: "20,000₩ (2개월)", color: "#58d68d",
-                benefits: ["✨ [수익 강화] 1분마다 15원 지급", "🏠 홈(/sethome) 개수 5개 확장", "📛 [Sky Plus] 전용 칭호 부여", "🎨 채팅 이름 색상 변경 권한"]
-            },
-            premium: {
-                title: "Sky Premium 등급", price: "30,000₩ (2개월)", color: "#f4d03f",
-                benefits: [
-                    "✨ [최고 수익] 1분마다 30원 자동 지급",
-                    "💤 [잠수 무제한] 24시간 서버 접속 유지 가능",
-                    "🗑️ [편의 기능] 전용 /쓰레기통 명령어 권한",
-                    "📛 [특별 칭호] [SkyPremium] 전용 칭호 부여",
-                    "🚀 [우선 입장] 풀방일 때도 빈자리 만들고 입장"
-                ]
-            },
-            god: {
-                title: "Sky God 등급", price: "40,000₩ (2개월)", color: "#ff4757",
-                benefits: [
-                    "✨ [압도적 수익] 1분마다 50원 지급",
-                    "💤 [잠수 무제한] 서버 강퇴 면제 및 24시간 잠수",
-                    "🛠️ [아이템 수리] 즉시 수리 /repair 권한",
-                    "📛 [황금 칭호] [SkyGod] 황금빛 전용 칭호 부여",
-                    "🚀 [우선 입장] 인원 초과 시에도 언제든 즉시 입장",
-                    "👑 서버 최상위 후원자를 위한 최고의 예우"
-                ]
-            }
+            sky: { title: "Sky", price: "10,000₩", color: "#5dade2", benefits: ["1분마다 10원 지급", "[Sky] 전용 칭호 부여", "개인 창고(/pv 1) 제공", "매일 기본 키트 지급"] },
+            plus: { title: "Sky Plus", price: "20,000₩", color: "#58d68d", benefits: ["1분마다 20원 지급", "/sethome 5개 확장", "닉네임 색상 변경 권한", "다이아몬드 도구 키트"] },
+            premium: { title: "Sky Premium", price: "30,000₩", color: "#f4d03f", benefits: ["👑 1분마다 30원 지급", "💤 24시간 잠수 무제한", "🗑️ /쓰레기통 명령어 권한", "🚀 풀방 우선 입장 권한"] },
+            god: { title: "Sky God", price: "40,000₩", color: "#ff4757", benefits: ["✨ 1분마다 50원 지급", "🛠️ 아이템 즉시 수리 /repair", "📛 [SkyGod] 황금 칭호", "🚀 서버 즉시 입장 (우선순위)"] }
         };
 
         function showRank(type) {
             const data = rankData[type];
             document.getElementById('modalContent').innerHTML = `
-                <h2 style="color:${data.color}; margin-top:0;">${data.title}</h2>
-                <div style="background:rgba(255,215,0,0.1); color:var(--shop-color); padding:8px 15px; border-radius:8px; display:inline-block; font-weight:bold;">${data.price}</div>
-                <ul class="benefit-list">${data.benefits.map(b => `<li><i class="fas fa-check-circle" style="color:${data.color}"></i> ${b}</li>`).join('')}</ul>
-                <button class="login-btn" style="width:100%; justify-content:center; padding:15px;" onclick="closeModal()">닫기</button>
+                <h2 style="color:${data.color}; margin-top:0;">${data.title} 등급</h2>
+                <p style="font-weight:bold; color:var(--shop-color); font-size:1.2rem;">${data.price} <small>(2개월)</small></p>
+                <div style="margin:20px 0;">${data.benefits.map(b => `<div class="benefit-item"><i class="fas fa-check-circle" style="color:${data.color}"></i> ${b}</div>`).join('')}</div>
+                <button class="login-btn" style="width:100%; justify-content:center;" onclick="closeModal()">닫기</button>
             `;
             document.getElementById('modalOverlay').style.display = 'flex';
         }
-
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-        
-        function handleLogin() {
-            location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
-        }
 
-        async function loadJSONData() {
+        // JSON 데이터 로드
+        async function init() {
             try {
-                // 공지사항
-                const notice = await fetch('notice.json').then(r => r.json());
-                document.getElementById('notice-content').innerHTML = notice.map(n => `<li>${n.title}</li>`).join('');
-                // 패치노트
-                const patch = await fetch('patch.json').then(r => r.json());
-                document.getElementById('patch-content').innerHTML = patch.map(p => `<li><span>${p.title}</span> <span class="date">${p.date}</span></li>`).join('');
-                // 랭킹
-                const rank = await fetch('rank.json').then(r => r.json());
-                document.getElementById('rank-content').innerHTML = rank.map((u, i) => `
+                const [n, p, r] = await Promise.all([
+                    fetch('notice.json').then(res => res.json()),
+                    fetch('patch.json').then(res => res.json()),
+                    fetch('rank.json').then(res => res.json())
+                ]);
+                document.getElementById('notice-list').innerHTML = n.map(i => `<li>${i.title}</li>`).join('');
+                document.getElementById('patch-list').innerHTML = p.map(i => `<li><span>${i.title}</span><span class="date">${i.date}</span></li>`).join('');
+                document.getElementById('rank-list').innerHTML = r.map((u, i) => `
                     <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222;">
-                        <span><b>${i+1}.</b> ${u.name}</span> <span style="color:var(--shop-color)">${Number(u.value).toLocaleString()}₩</span>
+                        <span><b style="color:var(--accent-color)">${i+1}.</b> ${u.name}</span>
+                        <span style="color:var(--shop-color)">${u.value.toLocaleString()}₩</span>
                     </div>`).join('');
-            } catch (e) { console.error("JSON 로드 실패. 파일 확인 필요."); }
+            } catch (e) { console.error("데이터 로딩 실패"); }
         }
-
-        window.onload = loadJSONData;
+        window.onload = init;
     </script>
 </body>
 </html>
