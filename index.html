@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MidCore Official</title>
-    
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1697212060228344"
      crossorigin="anonymous"></script>
 
@@ -31,7 +31,6 @@
             line-height: 1.6;
         }
 
-        /* --- 상단 네비바 --- */
         nav {
             background: rgba(0,0,0,0.9);
             padding: 15px 10%;
@@ -49,11 +48,11 @@
 
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
 
-        /* --- 섹션 제목 --- */
+        /* 섹션 디자인 */
         h2 { font-size: 24px; font-weight: 900; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
         h2 i { color: var(--accent); }
 
-        /* --- 패치노트 & 공지사항 --- */
+        /* 게시판 리스트 */
         .board { background: var(--card); border-radius: 20px; overflow: hidden; margin-bottom: 50px; }
         .post-item {
             padding: 20px 25px;
@@ -62,7 +61,6 @@
             justify-content: space-between;
             align-items: center;
             transition: 0.2s;
-            cursor: pointer;
         }
         .post-item:hover { background: rgba(255,255,255,0.02); }
         .post-tag { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-right: 15px; }
@@ -71,7 +69,7 @@
         .post-title { flex-grow: 1; font-weight: 500; }
         .post-date { color: #555; font-size: 13px; }
 
-        /* --- 후원 등급 섹션 --- */
+        /* 후원 등급 카드 */
         .rank-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -85,12 +83,11 @@
             border: 1px solid rgba(255,255,255,0.05);
             transition: 0.3s;
         }
-        .rank-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
+        .rank-card:hover { transform: translateY(-10px); }
         .rank-icon { font-size: 32px; margin-bottom: 15px; }
-        .rank-name { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+        .rank-name { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
         .rank-price { font-size: 26px; font-weight: bold; margin-bottom: 20px; }
-        .rank-price span { font-size: 14px; color: var(--dim); font-weight: normal; }
+        .rank-price span { font-size: 14px; color: var(--dim); }
 
         .btn-buy {
             display: inline-block;
@@ -101,18 +98,10 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: bold;
-            transition: 0.3s;
         }
         .rank-card:hover .btn-buy { background: var(--accent); }
 
-        /* --- 광고 자동 삽입용 여백 --- */
-        .ad-container {
-            margin: 40px 0;
-            text-align: center;
-            min-height: 100px;
-        }
-
-        footer { text-align: center; padding: 60px 0; color: #444; font-size: 13px; }
+        footer { text-align: center; padding: 60px 0; color: #444; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -122,25 +111,21 @@
     <div class="nav-links">
         <a href="#board">패치노트</a>
         <a href="#ranks">후원등급</a>
-        <a href="https://midcore.mcv.kr">서버상태</a>
     </div>
 </nav>
 
 <div class="container">
-    <div class="ad-container">
-        </div>
-
     <section id="board">
         <h2><i class="fas fa-clipboard-list"></i> 패치노트 및 공지</h2>
         <div class="board">
             <div class="post-item">
                 <span class="post-tag tag-patch">PATCH</span>
-                <span class="post-title">2026년 1월 27일 업데이트 안내 (시즌 2 시작)</span>
+                <span class="post-title">신규 시즌 업데이트 내용 안내</span>
                 <span class="post-date">2026.01.27</span>
             </div>
             <div class="post-item">
                 <span class="post-tag tag-notice">NOTICE</span>
-                <span class="post-title">미드코어 서버 이용 가이드라인 및 규칙</span>
+                <span class="post-title">서버 공식 규칙 및 매너 안내</span>
                 <span class="post-date">2026.01.25</span>
             </div>
         </div>
@@ -175,13 +160,11 @@
             </div>
         </div>
     </section>
-
-    <div class="ad-container"></div>
 </div>
 
 <footer>
-    &copy; 2026 MIDCORE Server. All rights reserved. <br>
-    본 웹사이트는 미드코어 서버의 공식 정보를 제공합니다.
+    &copy; 2026 MIDCORE Server. All rights reserved.<br>
+    애드센스 승인 대기 중
 </footer>
 
 </body>
