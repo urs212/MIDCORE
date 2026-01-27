@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MidCore Official</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1697212060228344"
+     crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -35,28 +39,15 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .logo { font-weight: 900; font-size: 24px; color: var(--accent); letter-spacing: 2px; }
         .nav-links a { color: var(--dim); text-decoration: none; margin-left: 25px; font-size: 14px; transition: 0.3s; }
         .nav-links a:hover { color: white; }
 
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-
-        /* --- 광고 섹션 (구글 애드) --- */
-        .google-ad {
-            background: rgba(255,255,255,0.02);
-            width: 100%;
-            min-height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #444;
-            border: 1px dashed #333;
-            margin-bottom: 40px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
 
         /* --- 섹션 제목 --- */
         h2 { font-size: 24px; font-weight: 900; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
@@ -74,7 +65,6 @@
             cursor: pointer;
         }
         .post-item:hover { background: rgba(255,255,255,0.02); }
-        .post-item:last-child { border-bottom: none; }
         .post-tag { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-right: 15px; }
         .tag-patch { background: var(--accent); color: white; }
         .tag-notice { background: #e67e22; color: white; }
@@ -115,6 +105,13 @@
         }
         .rank-card:hover .btn-buy { background: var(--accent); }
 
+        /* --- 광고 자동 삽입용 여백 --- */
+        .ad-container {
+            margin: 40px 0;
+            text-align: center;
+            min-height: 100px;
+        }
+
         footer { text-align: center; padding: 60px 0; color: #444; font-size: 13px; }
     </style>
 </head>
@@ -125,11 +122,13 @@
     <div class="nav-links">
         <a href="#board">패치노트</a>
         <a href="#ranks">후원등급</a>
-        <a href="#">상태창보기</a> </div>
+        <a href="https://midcore.mcv.kr">서버상태</a>
+    </div>
 </nav>
 
 <div class="container">
-    <div class="google-ad">Google AdSense Space</div>
+    <div class="ad-container">
+        </div>
 
     <section id="board">
         <h2><i class="fas fa-clipboard-list"></i> 패치노트 및 공지</h2>
@@ -143,11 +142,6 @@
                 <span class="post-tag tag-notice">NOTICE</span>
                 <span class="post-title">미드코어 서버 이용 가이드라인 및 규칙</span>
                 <span class="post-date">2026.01.25</span>
-            </div>
-            <div class="post-item">
-                <span class="post-tag tag-patch">PATCH</span>
-                <span class="post-title">서버 최적화 및 버그 수정 내역</span>
-                <span class="post-date">2026.01.20</span>
             </div>
         </div>
     </section>
@@ -182,7 +176,7 @@
         </div>
     </section>
 
-    <div class="google-ad" style="margin-top: 50px;">Google AdSense Space</div>
+    <div class="ad-container"></div>
 </div>
 
 <footer>
