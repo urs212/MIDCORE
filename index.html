@@ -2,170 +2,316 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MidCore Official</title>
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1697212060228344"
-     crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>Tetris Duo Edition</title>
     <style>
         :root {
-            --bg: #0d0e10;
-            --card: #16181d;
-            --accent: #6d5dfc;
-            --sky: #00d2ff;
-            --sky-plus: #3a86ff;
-            --sky-premium: #8338ec;
-            --sky-god: #ff006e;
-            --text: #ffffff;
-            --dim: #a0a0a0;
+            --bg-color: #0a0a0c;
+            --grid-color: #1e1e26;
+            --p1-color: #00f2ff;
+            --p2-color: #ff00ff;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Noto Sans KR', sans-serif;
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        nav {
-            background: rgba(0,0,0,0.9);
-            padding: 15px 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .logo { font-weight: 900; font-size: 24px; color: var(--accent); letter-spacing: 2px; }
-        .nav-links a { color: var(--dim); text-decoration: none; margin-left: 25px; font-size: 14px; transition: 0.3s; }
-        .nav-links a:hover { color: white; }
-
-        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-
-        /* 섹션 디자인 */
-        h2 { font-size: 24px; font-weight: 900; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        h2 i { color: var(--accent); }
-
-        /* 게시판 리스트 */
-        .board { background: var(--card); border-radius: 20px; overflow: hidden; margin-bottom: 50px; }
-        .post-item {
-            padding: 20px 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.2s;
-        }
-        .post-item:hover { background: rgba(255,255,255,0.02); }
-        .post-tag { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-right: 15px; }
-        .tag-patch { background: var(--accent); color: white; }
-        .tag-notice { background: #e67e22; color: white; }
-        .post-title { flex-grow: 1; font-weight: 500; }
-        .post-date { color: #555; font-size: 13px; }
-
-        /* 후원 등급 카드 */
-        .rank-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-        .rank-card {
-            background: var(--card);
-            padding: 40px 20px;
-            border-radius: 24px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
-        }
-        .rank-card:hover { transform: translateY(-10px); }
-        .rank-icon { font-size: 32px; margin-bottom: 15px; }
-        .rank-name { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
-        .rank-price { font-size: 26px; font-weight: bold; margin-bottom: 20px; }
-        .rank-price span { font-size: 14px; color: var(--dim); }
-
-        .btn-buy {
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 50px;
-            background: rgba(255,255,255,0.05);
+            background-color: var(--bg-color);
             color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .rank-card:hover .btn-buy { background: var(--accent); }
 
-        footer { text-align: center; padding: 60px 0; color: #444; font-size: 12px; }
+        .game-wrapper {
+            display: flex;
+            gap: 40px;
+        }
+
+        .player-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.3; /* 비활성 시 반투명 */
+            transition: opacity 0.3s;
+        }
+
+        .player-section.active { opacity: 1; }
+
+        .canvas-container {
+            position: relative;
+            border: 4px solid var(--grid-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        canvas { background-color: rgba(0, 0, 0, 0.8); display: block; }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 15px;
+            background: #1a1a20;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .stat { text-align: center; }
+        .label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .value { font-size: 20px; font-weight: bold; color: var(--p1-color); }
+        .p2 .value { color: var(--p2-color); }
+
+        .start-msg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0,0,0,1);
+        }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">MIDCORE</div>
-    <div class="nav-links">
-        <a href="#board">패치노트</a>
-        <a href="#ranks">후원등급</a>
+<div class="game-wrapper">
+    <div id="p1-section" class="player-section active">
+        <div class="canvas-container">
+            <canvas id="p1-canvas" width="240" height="400"></canvas>
+        </div>
+        <div class="info-panel">
+            <div class="stat">
+                <div class="label">P1 Score</div>
+                <div id="p1-score" class="value">0</div>
+            </div>
+            <canvas id="p1-next" width="60" height="60"></canvas>
+        </div>
     </div>
-</nav>
 
-<div class="container">
-    <section id="board">
-        <h2><i class="fas fa-clipboard-list"></i> 패치노트 및 공지</h2>
-        <div class="board">
-            <div class="post-item">
-                <span class="post-tag tag-patch">PATCH</span>
-                <span class="post-title">신규 시즌 업데이트 내용 안내</span>
-                <span class="post-date">2026.01.27</span>
-            </div>
-            <div class="post-item">
-                <span class="post-tag tag-notice">NOTICE</span>
-                <span class="post-title">서버 공식 규칙 및 매너 안내</span>
-                <span class="post-date">2026.01.25</span>
-            </div>
+    <div id="p2-section" class="player-section">
+        <div class="canvas-container">
+            <canvas id="p2-canvas" width="240" height="400"></canvas>
+            <div id="p2-join-msg" class="start-msg">Press '0' to Join</div>
         </div>
-    </section>
-
-    <section id="ranks">
-        <h2><i class="fas fa-crown"></i> 후원 등급 안내</h2>
-        <div class="rank-container">
-            <div class="rank-card" style="border-top: 4px solid var(--sky);">
-                <div class="rank-icon" style="color: var(--sky);"><i class="fas fa-cloud"></i></div>
-                <div class="rank-name" style="color: var(--sky);">SKY</div>
-                <div class="rank-price">10,000<span>원</span></div>
-                <a href="#" class="btn-buy">혜택 보기</a>
+        <div class="info-panel p2">
+            <div class="stat">
+                <div class="label">P2 Score</div>
+                <div id="p2-score" class="value">0</div>
             </div>
-            <div class="rank-card" style="border-top: 4px solid var(--sky-plus);">
-                <div class="rank-icon" style="color: var(--sky-plus);"><i class="fas fa-cloud-sun"></i></div>
-                <div class="rank-name" style="color: var(--sky-plus);">SKY+</div>
-                <div class="rank-price">20,000<span>원</span></div>
-                <a href="#" class="btn-buy">혜택 보기</a>
-            </div>
-            <div class="rank-card" style="border-top: 4px solid var(--sky-premium);">
-                <div class="rank-icon" style="color: var(--sky-premium);"><i class="fas fa-gem"></i></div>
-                <div class="rank-name" style="color: var(--sky-premium);">SKY PREMIUM</div>
-                <div class="rank-price">30,000<span>원</span></div>
-                <a href="#" class="btn-buy">혜택 보기</a>
-            </div>
-            <div class="rank-card" style="border-top: 4px solid var(--sky-god);">
-                <div class="rank-icon" style="color: var(--sky-god);"><i class="fas fa-bolt"></i></div>
-                <div class="rank-name" style="color: var(--sky-god);">SKY GOD</div>
-                <div class="rank-price">40,000<span>원</span></div>
-                <a href="#" class="btn-buy">혜택 보기</a>
-            </div>
+            <canvas id="p2-next" width="60" height="60"></canvas>
         </div>
-    </section>
+    </div>
 </div>
 
-<footer>
-    &copy; 2026 MIDCORE Server. All rights reserved.<br>
-    애드센스 승인 대기 중
-</footer>
+<script>
+const COLS = 12, ROWS = 20, BLOCK_SIZE = 20;
+const PIECES = 'ILJOTSZ';
+const COLORS = [null, '#00f2ff', '#ff971c', '#0033ff', '#f6ff00', '#ff003c', '#00ff22', '#9d00ff'];
 
+class Tetris {
+    constructor(canvasId, nextId, scoreId, sectionId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.nextCanvas = document.getElementById(nextId);
+        this.nextCtx = this.nextCanvas.getContext('2d');
+        this.scoreElement = document.getElementById(scoreId);
+        this.section = document.getElementById(sectionId);
+        
+        this.ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+        this.nextCtx.scale(15, 15);
+
+        this.arena = this.createMatrix(COLS, ROWS);
+        this.player = { pos: {x: 0, y: 0}, matrix: null, next: null, score: 0 };
+        this.isActive = false;
+        this.dropCounter = 0;
+        this.dropInterval = 1000;
+    }
+
+    createMatrix(w, h) { return Array.from({length: h}, () => new Array(w).fill(0)); }
+
+    createPiece(type) {
+        if (type === 'I') return [[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]];
+        if (type === 'L') return [[0,2,0],[0,2,0],[0,2,2]];
+        if (type === 'J') return [[0,3,0],[0,3,0],[3,3,0]];
+        if (type === 'O') return [[4,4],[4,4]];
+        if (type === 'Z') return [[5,5,0],[0,5,5],[0,0,0]];
+        if (type === 'S') return [[0,6,6],[6,6,0],[0,0,0]];
+        if (type === 'T') return [[0,7,0],[7,7,7],[0,0,0]];
+    }
+
+    draw() {
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawMatrix(this.arena, {x: 0, y: 0}, this.ctx);
+        if (this.isActive) this.drawMatrix(this.player.matrix, this.player.pos, this.ctx);
+    }
+
+    drawMatrix(matrix, offset, context) {
+        matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    context.fillStyle = COLORS[value];
+                    context.fillRect(x + offset.x, y + offset.y, 1, 1);
+                    context.strokeStyle = 'white';
+                    context.lineWidth = 0.05;
+                    context.strokeRect(x + offset.x, y + offset.y, 1, 1);
+                }
+            });
+        });
+    }
+
+    playerReset() {
+        this.player.matrix = this.player.next || this.createPiece(PIECES[Math.random() * PIECES.length | 0]);
+        this.player.next = this.createPiece(PIECES[Math.random() * PIECES.length | 0]);
+        this.player.pos.y = 0;
+        this.player.pos.x = (this.arena[0].length / 2 | 0) - (this.player.matrix[0].length / 2 | 0);
+        if (this.collide()) {
+            this.arena.forEach(row => row.fill(0));
+            this.player.score = 0;
+        }
+        this.updateScore();
+        this.drawNext();
+    }
+
+    drawNext() {
+        this.nextCtx.fillStyle = '#1a1a20';
+        this.nextCtx.fillRect(0, 0, this.nextCanvas.width, this.nextCanvas.height);
+        this.drawMatrix(this.player.next, {x: 1, y: 1}, this.nextCtx);
+    }
+
+    collide() {
+        const [m, o] = [this.player.matrix, this.player.pos];
+        for (let y = 0; y < m.length; ++y) {
+            for (let x = 0; x < m[y].length; ++x) {
+                if (m[y][x] !== 0 && (this.arena[y + o.y] && this.arena[y + o.y][x + o.x]) !== 0) return true;
+            }
+        }
+        return false;
+    }
+
+    merge() {
+        this.player.matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) this.arena[y + this.player.pos.y][x + this.player.pos.x] = value;
+            });
+        });
+    }
+
+    rotate(dir) {
+        for (let y = 0; y < this.player.matrix.length; ++y) {
+            for (let x = 0; x < y; ++x) {
+                [this.player.matrix[x][y], this.player.matrix[y][x]] = [this.player.matrix[y][x], this.player.matrix[x][y]];
+            }
+        }
+        dir > 0 ? this.player.matrix.forEach(row => row.reverse()) : this.player.matrix.reverse();
+    }
+
+    playerRotate() {
+        const pos = this.player.pos.x;
+        let offset = 1;
+        this.rotate(1);
+        while (this.collide()) {
+            this.player.pos.x += offset;
+            offset = -(offset + (offset > 0 ? 1 : -1));
+            if (offset > this.player.matrix[0].length) {
+                this.rotate(-1);
+                this.player.pos.x = pos;
+                return;
+            }
+        }
+    }
+
+    drop() {
+        this.player.pos.y++;
+        if (this.collide()) {
+            this.player.pos.y--;
+            this.merge();
+            this.playerReset();
+            this.arenaSweep();
+        }
+        this.dropCounter = 0;
+    }
+
+    hardDrop() {
+        while(!this.collide()) { this.player.pos.y++; }
+        this.player.pos.y--;
+        this.merge();
+        this.playerReset();
+        this.arenaSweep();
+    }
+
+    arenaSweep() {
+        let rowCount = 1;
+        outer: for (let y = this.arena.length - 1; y > 0; --y) {
+            for (let x = 0; x < this.arena[y].length; ++x) {
+                if (this.arena[y][x] === 0) continue outer;
+            }
+            const row = this.arena.splice(y, 1)[0].fill(0);
+            this.arena.unshift(row);
+            ++y;
+            this.player.score += rowCount * 10;
+            rowCount *= 2;
+        }
+        this.updateScore();
+    }
+
+    updateScore() { this.scoreElement.innerText = this.player.score; }
+
+    start() {
+        this.isActive = true;
+        this.section.classList.add('active');
+        this.playerReset();
+    }
+}
+
+const p1 = new Tetris('p1-canvas', 'p1-next', 'p1-score', 'p1-section');
+const p2 = new Tetris('p2-canvas', 'p2-next', 'p2-score', 'p2-section');
+
+p1.start(); // P1은 자동 시작
+
+let lastTime = 0;
+function update(time = 0) {
+    const deltaTime = time - lastTime;
+    lastTime = time;
+
+    [p1, p2].forEach(p => {
+        if (p.isActive) {
+            p.dropCounter += deltaTime;
+            if (p.dropCounter > p.dropInterval) p.drop();
+            p.draw();
+        }
+    });
+    requestAnimationFrame(update);
+}
+
+window.addEventListener('keydown', e => {
+    // Player 1 (WASD + Space)
+    if (p1.isActive) {
+        if (e.code === 'KeyA') p1.player.pos.x--; if (p1.collide()) p1.player.pos.x++;
+        if (e.code === 'KeyD') p1.player.pos.x++; if (p1.collide()) p1.player.pos.x--;
+        if (e.code === 'KeyS') p1.drop();
+        if (e.code === 'KeyW') p1.playerRotate();
+        if (e.code === 'Space') p1.hardDrop();
+    }
+
+    // Player 2 (IJKL + Enter)
+    if (e.code === 'Digit0' || e.code === 'Numpad0') {
+        if (!p2.isActive) {
+            p2.start();
+            document.getElementById('p2-join-msg').style.display = 'none';
+        }
+    }
+    if (p2.isActive) {
+        if (e.code === 'KeyJ') p2.player.pos.x--; if (p2.collide()) p2.player.pos.x++;
+        if (e.code === 'KeyL') p2.player.pos.x++; if (p2.collide()) p2.player.pos.x--;
+        if (e.code === 'KeyK') p2.drop();
+        if (e.code === 'KeyI') p2.playerRotate();
+        if (e.code === 'Enter') p2.hardDrop();
+    }
+});
+
+update();
+</script>
 </body>
 </html>
